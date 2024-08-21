@@ -59,7 +59,7 @@ jobs:
     - name: Install argocd chart
       if: ${{ env.ACTION }} == 'apply'
       run: |
-          helm search --all --short ${{ env.ARGOCD_RELEASE_NAME }}
+          helm search -A --short ${{ env.ARGOCD_RELEASE_NAME }}
           if [ $? -eq 1 ]; then
             echo "Release ${{ env.ARGOCD_RELEASE_NAME }} não encontrada. Instalando..."
             helm install --values ./deployment/helm/argoproj/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
