@@ -66,3 +66,7 @@ jobs:
       if: always()
       run: |
             rm -rf ~/.kube
+
+    - name: get pods
+      if: always()
+      run: kubectl get pods
