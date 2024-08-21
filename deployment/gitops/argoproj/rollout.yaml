@@ -8,11 +8,17 @@ metadata:
 spec:
   project: platform-demo
   source:
-    repoURL: 'https://kubernetes.github.io/ingress-nginx'
-    targetRevision: 4.11.2
-    chart: ingress-nginx
+    repoURL: 'https://argoproj.github.io/argo-helm'
+    targetRevision: 2.37.5
+    chart: argo-rollouts
+    helm:
+      parameters:
+        - name: dashboard.ingress.enabled
+          value: "true"
+        - name: dashboard.enabled
+          value: "true"
   destination:
-    namespace: ingress-controller
+    namespace: argoproj
     server: 'https://kubernetes.default.svc'
   syncPolicy:
     automated:

@@ -15,6 +15,7 @@ env:
   kube_production: kttps://production-kubernetes.default.svc:443
   kube_development: kttps://development-kubernetes.default.svc:443
   ACTION: destroy
+  ARGOCD_RELEASE_NAME: destroy
 
 jobs:
   deployment:
@@ -58,13 +59,23 @@ jobs:
     - name: Install argocd chart
       if: ${{ env.ACTION }} == 'apply'
       run: |
-        helm upgrade --install --values ./deployment/helm/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
+          helm search --all --short ${{ env.ARGOCD_RELEASE_NAME }}
+          if [ $? -eq 1 ]; then
+            echo "Release ${{ env.ARGOCD_RELEASE_NAME }} não encontrada. Instalando..."
+            helm install --values ./deployment/helm/argoproj/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
+          else
+            echo "Release ${{ env.ARGOCD_RELEASE_NAME }} encontrada. Fazendo upgrade..."
+            helm upgrade --install --values ./deployment/helm/argoproj/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
+          fi
 
     - name: install projects
       run: kubectl apply -R -f ./deployment/gitops/project
 
     - name: install ingress
       run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
+      
+    - name: install argo rollouts
+      run: kubectl apply -R -f ./deployment/gitops/argoproj/rollout.yaml 
 
     - name: Remove kubeconfig
       run: |
