@@ -68,7 +68,7 @@ jobs:
 
     - name: install projects
       if: always()
-      run: kubectl apply -f ./deployment/gitops/project
+      run: kubectl apply -R -f ./deployment/gitops/project
 
     # - uses: actions-hub/kubectl@master
     #   if: always()
