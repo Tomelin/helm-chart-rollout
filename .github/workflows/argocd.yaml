@@ -62,8 +62,8 @@ jobs:
           COUNT=$(helm list -A --filter ${{ env.ARGOCD_RELEASE_NAME }}|grep -v  UPDATED |wc -l |sed 's/ //g')
           if [ $COUNT == 0 ];then
             echo "Release ${{ env.ARGOCD_RELEASE_NAME }} não encontrada. Instalando..."
-            echo "helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml  --create-namespace --namespace argoproj -include-crds"
-            helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml   --create-namespace --namespace argoproj -include-crds
+            echo "helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml  --create-namespace --namespace argoproj"
+            helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml   --create-namespace --namespace argoproj
           fi
          
     - name: install projects
