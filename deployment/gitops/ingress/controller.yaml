@@ -11,6 +11,12 @@ spec:
     repoURL: 'https://kubernetes.github.io/ingress-nginx'
     targetRevision: 4.11.2
     chart: ingress-nginx
+    helm:
+      values:
+        service:
+          annotations: 
+            service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+            service.beta.kubernetes.io/azure-load-balancer-tcp-idle-timeout: 30
   destination:
     namespace: ingress-controller
     server: 'https://kubernetes.default.svc'
