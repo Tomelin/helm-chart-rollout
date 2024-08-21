@@ -38,7 +38,7 @@ crds:
 global:
   # -- Default domain used by all components
   ## Used for ingresses, certificates, SSO, notifications, etc.
-  domain: synera.com.br
+  domain: gitops.synera.com.br
 
   # -- Common labels for the all resources
   additionalLabels: {}
@@ -2154,7 +2154,7 @@ server:
       # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 
     # -- Defines which ingress controller will implement the resource
-    ingressClassName: ""
+    ingressClassName: "nginx"
 
     # -- Argo CD server hostname
     # @default -- `""` (defaults to global.domain)
