@@ -58,7 +58,7 @@ jobs:
     - name: Install argocd chart
       if: ${{ env.ACTION }} == 'apply'
       run: |
-          helm uninstall --values ./deployment/helm/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj 
+          helm uninstall  argocd argo/argo-cd  --namespace argoproj 
         
     - name: Remove kubeconfig
       if: always()
