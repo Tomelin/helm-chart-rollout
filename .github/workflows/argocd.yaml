@@ -55,10 +55,10 @@ jobs:
         mkdir -p ~/.kube
         echo ${{ inputs.kube-config }}|base64 -d > ~/.kube/config
 
-    # - name: Install argocd chart
-    #   if: ${{ env.ACTION }} == 'apply'
-    #   run: |
-    #     helm upgrade --install --values ./deployment/helm/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
+    - name: Install argocd chart
+      if: ${{ env.ACTION }} == 'apply'
+      run: |
+        helm upgrade --install --values ./deployment/helm/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
 
     - name: install projects
       if: always()
