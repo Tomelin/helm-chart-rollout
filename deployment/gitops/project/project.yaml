@@ -14,3 +14,4 @@ spec:
     server: '*'
   sourceRepos:
   - 'https://argoproj.github.io/argo-helm'
+  - 'https://kubernetes.github.io/ingress-nginx'
