@@ -61,14 +61,19 @@ jobs:
       if: ${{ env.ACTION }} == 'apply'
       run: |
         helm upgrade --install --values ./deployment/helm/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
-        
-    - name: Remove kubeconfig
+
+    - name: get pods
       if: always()
-      run: |
-            rm -rf ~/.kube
+      run: kubectl get pods
 
     - uses: actions-hub/kubectl@master
+      if: always()
       env:
         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
       with:
         args: get pods
+
+    - name: Remove kubeconfig
+      if: always()
+      run: |
+            rm -rf ~/.kube
