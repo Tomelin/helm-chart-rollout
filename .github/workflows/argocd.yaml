@@ -59,10 +59,8 @@ jobs:
     - name: Install argocd chart
       if: ${{ env.ACTION }} == 'apply'
       run: |
-
           COUNT=$(helm list -A --filter ${{ env.ARGOCD_RELEASE_NAME }}|grep -v  UPDATED |wc -l |sed 's/ //g')
-
-          if [ $COUNT == 1 ];then
+          if [ $COUNT == 0 ];then
             echo "Release ${{ env.ARGOCD_RELEASE_NAME }} não encontrada. Instalando..."
             helm install --values ./deployment/helm/argoproj/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
           else
