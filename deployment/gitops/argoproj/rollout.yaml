@@ -17,6 +17,10 @@ spec:
           value: "true"
         - name: dashboard.enabled
           value: "true"
+        - name: dashboard.enabled
+          value: "true"
+        - name: dashboard.ingress.ingressClassName
+          value: nginx
   destination:
     namespace: argoproj
     server: 'https://kubernetes.default.svc'
