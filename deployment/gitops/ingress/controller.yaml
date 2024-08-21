@@ -16,7 +16,7 @@ spec:
         service:
           annotations: 
             service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
-            service.beta.kubernetes.io/azure-load-balancer-tcp-idle-timeout: 30
+            service.beta.kubernetes.io/azure-load-balancer-tcp-idle-timeout: 31
   destination:
     namespace: ingress-controller
     server: 'https://kubernetes.default.svc'
