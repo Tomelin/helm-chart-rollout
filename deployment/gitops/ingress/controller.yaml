@@ -12,7 +12,7 @@ spec:
     targetRevision: 4.11.2
     chart: ingress-nginx
     helm:
-      values:
+      values: |
         service:
           annotations: 
             service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
