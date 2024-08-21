@@ -101,7 +101,7 @@ jobs:
 
   call_install_argocd:
     name: Install ArgocdCD
-    uses: ./.github/workflows/argocd.yml
+    uses: ./.github/workflows/argocd.yaml 
     needs: terraform
     if: ${{ needs.terraform.result }} == 'success'
     with:
