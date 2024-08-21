@@ -1,5 +1,5 @@
-name: install-argocd
-run-name: Install ArgoCD in kubernetes cluster
+name: deployment-kubernetes
+run-name: Deployment resources in Kubernetes CI
 
 on:
   workflow_call:
@@ -12,54 +12,55 @@ on:
         type: string  
 
 env:
-  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-  ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
-  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  kube_production: kttps://production-kubernetes.default.svc:443
+  kube_development: kttps://development-kubernetes.default.svc:443
   ACTION: destroy
 
 jobs:
-  argocd:
-    name: 'ArgoCD'
-    runs-on: ubuntu-latest
-    outputs:
-      kube_config: ${{ steps.aks_cluster_name.outputs.CONFIG }}
-      env: ${{ steps.environment.outputs.ENV }}
-
-    defaults:
-      run:
-        shell: bash
+  deployment:
+    runs-on: 'ubuntu-latest'
+    if: ${{ github.env.ACTION }} == 'apply'
 
     steps:
-      - uses: actions/checkout@v1
+    - uses: actions/checkout@v1
 
-      - name: Install Helm
-        uses: azure/setup-helm@v4
-        with:
-          version: v3.13.0
-          kubeconfig: ${{ inputs.kube-config }}
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-  
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.6.0
-        with:
-          kubeconfig: ${{ inputs.kube-config }}
-        env:
-          CR_TOKEN: "${{ github.token }}"
-  
-      - name: Action status
-        run: echo ${{ inputs.kube-config }}
-  
-      - name: Add dependency chart repos
-        run: |
-          helm repo add argo https://argoproj.github.io/argo-helm
-  
-      - name: Search argocd chart
-        run: |
-            helm search repo argo
-  
-      - name: Kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo ${{ inputs.kube-config }}|base64 -d > ~/.kube/config
+    - name: Install Helm
+      uses: azure/setup-helm@v4
+      with:
+        version: v3.13.0
+        kubeconfig: ${{ inputs.kube-config }}
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+    - name: Run chart-releaser
+      uses: helm/chart-releaser-action@v1.6.0
+      with:
+        kubeconfig: ${{ inputs.kube-config }}
+      env:
+        CR_TOKEN: "${{ github.token }}"
+
+    - name: Action status
+      run: echo ${{ inputs.kube-config }}
+
+    - name: Add dependency chart repos
+      run: |
+        helm repo add argo https://argoproj.github.io/argo-helm
+
+    - name: Search argocd chart
+      run: |
+          helm search repo argo
+
+    - name: Kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo ${{ inputs.kube-config }}|base64 -d > ~/.kube/config
+
+    # - name: Install argocd chart
+    #   if: ${{ env.ACTION }} == 'apply'
+    #   run: |
+    #       helm upgrade -i --values ./deployment/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
+        
+    - name: Remove kubeconfig
+      if: always()
+      run: |
+            rm -rf ~/.kube
