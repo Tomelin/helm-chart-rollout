@@ -70,6 +70,9 @@ jobs:
       if: always()
       run: kubectl apply -R -f ./deployment/gitops/project
 
+    - name: install ingress
+      if: always()
+      run: kubectl apply -R -f ./deployment/gitops/ingress
     # - uses: actions-hub/kubectl@master
     #   if: always()
     #   env:
