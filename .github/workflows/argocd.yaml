@@ -2,10 +2,14 @@ name: install-argocd
 run-name: Install ArgoCD in kubernetes cluster
 
 on:
-  push:
-    branches: [ "main", "develop", "production"]
-  pull_request:
-    branches: [ "main", "develop", "production"]
+  workflow_call:
+    inputs:
+      kube-config:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string  
 
 env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
@@ -27,18 +31,35 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v1
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.13.0
+          kubeconfig: ${{ inputs.kube-config }}
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+  
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.6.0
+        with:
+          kubeconfig: ${{ inputs.kube-config }}
+        env:
+          CR_TOKEN: "${{ github.token }}"
+  
+      - name: Action status
+        run: echo ${{ inputs.kube-config }}
+  
+      - name: Add dependency chart repos
+        run: |
+          helm repo add argo https://argoproj.github.io/argo-helm
+  
+      - name: Search argocd chart
+        run: |
+            helm search repo argo
+  
       - name: Kubeconfig
         run: |
           mkdir -p ~/.kube
           echo ${{ inputs.kube-config }}|base64 -d > ~/.kube/config
-      - uses: actions/checkout@v3
-      - name: Deploy
-        uses: WyriHaximus/github-action-helm3@v3
-        with:
-          exec: helm list
-          # kubeconfig: '${{ secrets.KUBECONFIG }}'
-          overrule_existing_kubeconfig: "true"
-      - name: remove Kubeconfig
-        run: |
-            rm -rf ~/.kube

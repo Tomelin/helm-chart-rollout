@@ -99,11 +99,11 @@ jobs:
   #         otelServiceName: deploy-infra
 
 
-  # call_deployment:
-  #   name: Deployment
-  #   uses: ./.github/workflows/deployment.yml
-  #   needs: terraform
-  #   if: ${{ needs.terraform.result }} == 'success'
-  #   with:
-  #     kube-config: ${{ needs.terraform.outputs.kube_config }}
-  #     environment: ${{ needs.terraform.outputs.env }}
+  call_install_argocd:
+    name: Install ArgocdCD
+    uses: ./.github/workflows/argocd.yml
+    needs: terraform
+    if: ${{ needs.terraform.result }} == 'success'
+    with:
+      kube-config: ${{ needs.terraform.outputs.kube_config }}
+      environment: ${{ needs.terraform.outputs.env }}
