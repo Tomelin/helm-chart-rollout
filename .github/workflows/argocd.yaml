@@ -56,10 +56,11 @@ jobs:
         echo ${{ inputs.kube-config }}|base64 -d > ~/.kube/config
 
         # helm upgrade --install --values ./deployment/helm/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj 
+        # helm uninstall argocd --namespace argoproj 
     - name: Install argocd chart
       if: ${{ env.ACTION }} == 'apply'
       run: |
-          helm uninstall argocd --namespace argoproj 
+        helm upgrade --install --values ./deployment/helm/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj 
         
     - name: Remove kubeconfig
       if: always()
