@@ -17,9 +17,10 @@ spec:
     targetRevision: 4.11.2
     chart: ingress-nginx
     helm:
-      parameters:
-        - name: service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path
-          value: "/healthz"
+      values: |
+        service:
+          annotations:
+            servicebeta.kubernetes.io/azure-load-balancer-health-probe-request-path: "/healthz"
   syncPolicy:
     automated:
       prune: true
