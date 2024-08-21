@@ -61,14 +61,11 @@ jobs:
         helm upgrade --install --values ./deployment/helm/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
 
     - name: install projects
-      if: always()
       run: kubectl apply -R -f ./deployment/gitops/project
 
     - name: install ingress
-      if: always()
       run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
 
     - name: Remove kubeconfig
-      if: always()
       run: |
             rm -rf ~/.kube
