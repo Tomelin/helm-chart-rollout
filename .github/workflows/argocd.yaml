@@ -65,9 +65,6 @@ jobs:
           if [ $COUNT == 0 ];then
             echo "Release ${{ env.ARGOCD_RELEASE_NAME }} não encontrada. Instalando..."
             helm install --values ./deployment/helm/argoproj/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
-          else
-            echo "Release ${{ env.ARGOCD_RELEASE_NAME }} encontrada. Fazendo upgrade..."
-            helm upgrade --install --values ./deployment/helm/argoproj/argocd/values.yaml argocd argo/argo-cd --create-namespace --namespace argoproj -include-crds
           fi
          
     - name: install projects
