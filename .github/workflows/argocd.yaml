@@ -45,11 +45,11 @@ jobs:
 
     - name: Add dependency chart repos
       run: |
-        helm repo add argo https://argoproj.github.io/argo-helm
+        helm repo add argoproj https://argoproj.github.io/argo-helm
 
     - name: Search argocd chart
       run: |
-          helm search repo argo
+          helm search repo argoproj
 
     - name: Kubeconfig
       run: |
