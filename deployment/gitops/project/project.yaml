@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: argoproj
-  namespace: argoproj
+  name: platform-demo
+  namespace: platform-demo
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
-  clusterResourceWhitelist:
+  clusterResourceWhitelis:
   - group: '*'
     kind: '*'
   destinations:
