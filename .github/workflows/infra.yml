@@ -36,12 +36,13 @@ jobs:
       uses: hashicorp/setup-terraform@v1  
       with:
         terraform_wrapper: false
+
     - name: Terraform providers
       run: terraform providers
       working-directory: ./infra/terraform
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -upgrade
       working-directory: ./infra/terraform
 
 

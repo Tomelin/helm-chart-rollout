@@ -103,7 +103,7 @@ module "aks" {
 
 module "cloudflare" {
   count                  = var.cloudflare_dns_enable ? 1 : 0
-  source                 = "./modules/cloudflare/"
+  source                 = "./modules/cloudflare"
   cloudflare_account     = var.cloudflare_account
   cloudflare_domain      = var.cloudflare_domain
   cloudflare_dns_token   = var.cloudflare_dns_token
