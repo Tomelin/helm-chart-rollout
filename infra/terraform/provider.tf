@@ -9,6 +9,10 @@ terraform {
       source  = "hashicorp/helm"
       version = "2.14.0"
     }
+    cloudflare = {
+      source = "cloudflare/cloudflare"
+      version = "4.40.0"
+    }
   }
 
   backend "azurerm" {
@@ -34,4 +38,10 @@ provider "helm" {
     token                  = local.kube.kube_config[0].password
     cluster_ca_certificate = base64decode(local.kube.kube_config[0].cluster_ca_certificate)
   }
+}
+
+
+provider "cloudflare" {
+  email = var.cloudflare_account
+  token = var.cloudflare_dns_token
 }

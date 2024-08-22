@@ -96,6 +96,14 @@ module "aks" {
   network_profile     = var.network_profile
 }
 
+resource "cloudflare_record" "www" {
+  domain  = "${var.cloudflare_domain}"
+  name    = "gitops"
+  value   = "203.0.113.10"
+  type    = "A"
+  proxied = false
+}
+
 # module "ingress" {
 #   count      = var.enabled_ingress_controller.enabled == true ? 1 : 0
 #   source     = "./modules/ingress"
