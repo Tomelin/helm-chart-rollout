@@ -40,6 +40,6 @@ provider "helm" {
   }
 }
 
-provider "cloudflare" {
-  api_token = local.cloudflare_dns_token
-}
+# provider "cloudflare" {
+#   api_token = local.cloudflare_dns_token
+# }
