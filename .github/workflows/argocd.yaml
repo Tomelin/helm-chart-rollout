@@ -103,12 +103,6 @@ jobs:
         echo '${{ secrets.ARM_CLIENT_SECRET }}'
         echo '${{ inputs.cloudflare_dns_token }}'
 
-    - name: replace cloudflare token
-      run: |
-        sed -i "s/__CF_TOKEN__/$TOKEN/g" ./deployment/gitops/vault/external-dns.yaml
-      env:
-        TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
-
     - name: cat
       run: |
         cat ./deployment/gitops/vault/external-dns.yaml
