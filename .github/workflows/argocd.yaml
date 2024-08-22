@@ -83,6 +83,7 @@ jobs:
     - name: debug value
       run: |
         echo '${{ env.CLOUDFLARE_DNS_TOKEN }}'
+        echo '${{ secrets.CLOUDFLARE_DNS_TOKEN }}'
 
     - name: replace cloudflare token
       run: |
