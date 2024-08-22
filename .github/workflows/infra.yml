@@ -38,6 +38,10 @@ jobs:
         terraform_wrapper: false
         terraform_version: "1.9.5"
 
+    - name: Terraform version
+      run: terraform -version
+      working-directory: ./infra/terraform
+
     - name: Terraform Init
       run: terraform init
       working-directory: ./infra/terraform

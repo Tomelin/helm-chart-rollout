@@ -184,36 +184,36 @@ variable "enabled_argocd" {
 
 ##############################
 ## CLOUDFLARE
-variable "cloudflare_account" {
-  type        = string
-  description = "Account of cloudflare"
-  default     = ""
-}
+# variable "cloudflare_account" {
+#   type        = string
+#   description = "Account of cloudflare"
+#   default     = ""
+# }
 
-variable "cloudflare_domain" {
-  type        = string
-  default     = "synera.com.br"
-  description = "Domain to create a new dns record"
-}
+# variable "cloudflare_domain" {
+#   type        = string
+#   default     = "synera.com.br"
+#   description = "Domain to create a new dns record"
+# }
 
-variable "cloudflare_dns_token" {
-  type        = string
-  description = "DNS to authentication in cloudflare"
-  default     = ""
-  sensitive   = true
-}
+# variable "cloudflare_dns_token" {
+#   type        = string
+#   description = "DNS to authentication in cloudflare"
+#   default     = ""
+#   sensitive   = true
+# }
 
-variable "cloudflare_dns_address" {
-  type        = string
-  description = "IP address to create a new record"
-  default     = ""
-}
+# variable "cloudflare_dns_address" {
+#   type        = string
+#   description = "IP address to create a new record"
+#   default     = ""
+# }
 
-variable "cloudflare_dns_enable" {
-  type        = bool
-  default     = false
-  description = "Should the Kubernetes Auto Scaler be enabled for this Node Pool"
-}
+# variable "cloudflare_dns_enable" {
+#   type        = bool
+#   default     = false
+#   description = "Should the Kubernetes Auto Scaler be enabled for this Node Pool"
+# }
 
 
 
