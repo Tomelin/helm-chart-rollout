@@ -56,8 +56,8 @@ jobs:
 
     - name: debug inputs kube-config
       run:  |
-        echo "$(TOKEN)"
-        echo "TOKEN=$(TOKEN)" >> $GITHUB_OUTPUT
+        echo "$(echo $TOKEN)"
+        echo "TOKEN=$(echo $TOKEN)" >> $GITHUB_OUTPUT
       env:
         TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
 
