@@ -10,7 +10,7 @@ terraform {
       version = "2.14.0"
     }
     cloudflare = {
-      source  = "cloudflare/cloudflare"
+      source = "cloudflare/cloudflare"
       version = "4.40.0"
     }
   }
@@ -39,7 +39,6 @@ provider "helm" {
     cluster_ca_certificate = base64decode(local.kube.kube_config[0].cluster_ca_certificate)
   }
 }
-
 
 provider "cloudflare" {
   api_token = local.cloudflare_dns_token
