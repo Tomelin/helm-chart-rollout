@@ -54,12 +54,18 @@ jobs:
     - name: debug inputs kube-config
       run:  echo '${{ inputs.kube-config }}'
 
-    - name: debug inputs kube-config
+    - name: debug token01
       run:  |
         echo "$(echo $TOKEN)"
         echo "TOKEN=$(echo $TOKEN)" >> $GITHUB_OUTPUT
       env:
         TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
+
+    - name: debug token02
+      run:  |
+          echo  $TOKEN
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
 
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0
