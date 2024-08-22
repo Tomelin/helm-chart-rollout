@@ -100,6 +100,11 @@ module "aks" {
   network_profile     = var.network_profile
 }
 
+module "cf_recdord" {
+  source                 = "./modules/cfrecord"
+  cloudflare_dns_address = "127.0.0.1"
+}
+
 # module "record_dns" {
 #   count                  = var.cloudflare_dns_enable ? 1 : 0
 #   source                 = "./modules/cfrecord"
