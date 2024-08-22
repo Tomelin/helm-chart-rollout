@@ -1,8 +1,3 @@
-# locals {
-#   cloudflare_account   = var.cloudflare_account
-#   cloudflare_dns_token = var.cloudflare_dns_token
-# }
-
 data "cloudflare_zone" "domain" {
   name = var.cloudflare_domain
 }
