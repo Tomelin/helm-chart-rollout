@@ -20,8 +20,8 @@ locals {
 
   kube = module.aks[0].raw
 
-  # cloudflare_account   = var.cloudflare_account
-  # cloudflare_dns_token = var.cloudflare_dns_token
+  cloudflare_account   = var.cloudflare_account
+  cloudflare_dns_token = var.cloudflare_dns_token
 }
 
 
