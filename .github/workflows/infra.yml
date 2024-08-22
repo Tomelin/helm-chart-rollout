@@ -38,7 +38,7 @@ jobs:
         terraform_wrapper: false
 
     - name: Terraform Init
-      run: terraform init -upgrade
+      run: terraform init
       working-directory: ./infra/terraform
 
 
