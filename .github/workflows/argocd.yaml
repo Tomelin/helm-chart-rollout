@@ -31,7 +31,6 @@ jobs:
     runs-on: 'ubuntu-latest'
     permissions: 
         contents: read
-        issues: read
     if: ${{ github.env.ACTION }} == 'apply'
 
     steps:
