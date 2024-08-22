@@ -109,7 +109,6 @@ module "record_dns" {
   cloudflare_dns_address = var.cloudflare_dns_address
 }
 
-
 # module "ingress" {
 #   count      = var.enabled_ingress_controller.enabled == true ? 1 : 0
 #   source     = "./modules/ingress"
