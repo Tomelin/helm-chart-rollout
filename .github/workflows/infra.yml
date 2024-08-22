@@ -100,7 +100,7 @@ jobs:
     - name: Terraform output environment
       id: dns_token
       run: |
-        OUTPUT=${{ env.CLOUDFLARE_DNS_TOKEN }}
+        OUTPUT=${{ secrets.CLOUDFLARE_DNS_TOKEN }}
         echo "::set-output name=DNS_TOKEN::$OUTPUT"
       working-directory: ./infra/terraform
 
