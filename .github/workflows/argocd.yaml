@@ -17,7 +17,7 @@ on:
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
   kube_development: kttps://development-kubernetes.default.svc:443
-  ACTION: apply
+  ACTION: destroy
   ARGOCD_RELEASE_NAME: argocd
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
@@ -36,13 +36,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-
-    - name: Replace single file
-      uses: richardrigutins/replace-in-files@v2
-      with:
-        files: ./deployment/gitops/vault/external-dns.yaml
-        search-text: __CF_TOKEN__
-        replacement-text: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
 
     - name: Install Helm
       uses: azure/setup-helm@v4

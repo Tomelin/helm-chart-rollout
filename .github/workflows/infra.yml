@@ -14,7 +14,7 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   CLOUDFLARE_DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
   CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
-  ACTION: apply
+  ACTION: destroy
 
 jobs:
   terraform:
@@ -38,11 +38,6 @@ jobs:
       with:
         terraform_wrapper: false
         terraform_version: "1.9.5"
-
-    - name: debug secrets CLOUDFLARE_DNS_TOKEN
-      run: echo ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
-    - name: debug env CLOUDFLARE_DNS_TOKEN
-      run: echo '${{ env.CLOUDFLARE_DNS_TOKEN }}'
 
     - name: Terraform version
       run: terraform -version
