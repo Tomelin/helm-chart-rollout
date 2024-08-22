@@ -19,8 +19,12 @@ env:
   kube_development: kttps://development-kubernetes.default.svc:443
   ACTION: destroy
   ARGOCD_RELEASE_NAME: argocd
-  CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  CLOUDFLARE_DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
+  CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
 
 jobs:
   deployment:
@@ -49,6 +53,13 @@ jobs:
 
     - name: debug inputs kube-config
       run:  echo '${{ inputs.kube-config }}'
+
+    - name: debug inputs kube-config
+      run:  |
+        echo "$(TOKEN)"
+        echo "TOKEN=$(TOKEN)" >> $GITHUB_OUTPUT
+      env:
+        TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
 
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0

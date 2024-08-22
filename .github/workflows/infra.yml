@@ -104,6 +104,7 @@ jobs:
         echo "::set-output name=DNSTOKEN::$OUTPUT"
       working-directory: ./infra/terraform
 
+
   call_install_argocd:
     name: Install ArgocdCD
     uses: ./.github/workflows/argocd.yaml 
