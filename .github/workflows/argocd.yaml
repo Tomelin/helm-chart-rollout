@@ -56,15 +56,15 @@ jobs:
         mkdir -p ~/.kube
         echo ${{ inputs.kube-config }}|base64 -d > ~/.kube/config
 
-    - name: Install argocd chart
-      if: ${{ env.ACTION }} == 'apply'
-      run: |
-          COUNT=$(helm list -A --filter ${{ env.ARGOCD_RELEASE_NAME }}|grep -v  UPDATED |wc -l |sed 's/ //g')
-          if [ $COUNT == 0 ];then
-            echo "Release ${{ env.ARGOCD_RELEASE_NAME }} não encontrada. Instalando..."
-            echo "helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml  --create-namespace --namespace argoproj"
-            helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml   --create-namespace --namespace argoproj
-          fi
+    # - name: Install argocd chart
+    #   if: ${{ env.ACTION }} == 'apply'
+    #   run: |
+    #       COUNT=$(helm list -A --filter ${{ env.ARGOCD_RELEASE_NAME }}|grep -v  UPDATED |wc -l |sed 's/ //g')
+    #       if [ $COUNT == 0 ];then
+    #         echo "Release ${{ env.ARGOCD_RELEASE_NAME }} não encontrada. Instalando..."
+    #         echo "helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml  --create-namespace --namespace argoproj"
+    #         helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml   --create-namespace --namespace argoproj
+    #       fi
          
     - name: install projects
       run: kubectl apply -R -f ./deployment/gitops/project
