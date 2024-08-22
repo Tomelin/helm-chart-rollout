@@ -206,7 +206,7 @@ variable "cloudflare_dns_token" {
 variable "cloudflare_dns_address" {
   type        = string
   description = "IP address to create a new record"
-  default     = ""
+  default     = "127.0.0.1"
 }
 
 variable "cloudflare_dns_enable" {
