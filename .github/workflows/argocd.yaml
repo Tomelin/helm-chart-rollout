@@ -67,6 +67,13 @@ jobs:
       env:
           TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
 
+    - name: debug token04
+      run:  |
+              echo  $TOKEN
+              echo ${{ secrets }}
+      env:
+              TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
+
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0
       with:
