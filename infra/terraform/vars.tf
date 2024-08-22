@@ -196,7 +196,7 @@ variable "cloudflare_domain" {
 variable "cloudflare_dns_token" {
   type        = string
   description = "DNS to authentication in cloudflare"
-  sensitive = true
+  sensitive   = true
 }
 # variable "enabled_vault" {
 #   type = object({

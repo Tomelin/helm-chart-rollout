@@ -97,7 +97,7 @@ module "aks" {
 }
 
 resource "cloudflare_record" "www" {
-  domain  = "${var.cloudflare_domain}"
+  domain  = var.cloudflare_domain
   name    = "gitops"
   value   = "203.0.113.10"
   type    = "A"
