@@ -80,7 +80,10 @@ jobs:
     - name: install grafana
       run: kubectl apply -f ./deployment/gitops/monitoring/grafana.yaml
 
-      
+    - name: debug value
+      run: |
+        echo '${{ env.CLOUDFLARE_DNS_TOKEN }}'
+
     - name: replace cloudflare token
       run: |
         sed -i 's/__CF_TOKEN__/${{ env.CLOUDFLARE_DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
