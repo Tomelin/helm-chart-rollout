@@ -23,6 +23,7 @@ jobs:
     outputs:
       kube_config: ${{ steps.aks_cluster_name.outputs.CONFIG }}
       env: ${{ steps.environment.outputs.ENV }}
+      dns_token: ${{ steps.environment.outputs.DNS_TOKEN }}
 
     defaults:
       run:
@@ -91,6 +92,13 @@ jobs:
         echo "::set-output name=ENV::$OUTPUT"
       working-directory: ./infra/terraform
 
+    - name: Terraform output environment
+      id: dns_token
+      run: |
+        OUTPUT=${{ env.CLOUDFLARE_DNS_TOKEN }}
+        echo "::set-output name=DNS_TOKEN::$OUTPUT"
+      working-directory: ./infra/terraform
+
   call_install_argocd:
     name: Install ArgocdCD
     uses: ./.github/workflows/argocd.yaml 
@@ -99,3 +107,4 @@ jobs:
     with:
       kube-config: ${{ needs.terraform.outputs.kube_config }}
       environment: ${{ needs.terraform.outputs.env }}
+      cloudflare_dns_token: ${{ needs.terraform.outputs.dns_token }}

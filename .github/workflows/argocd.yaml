@@ -9,14 +9,16 @@ on:
         type: string
       environment:
         required: true
-        type: string  
+        type: string
+      cloudflare_dns_token:  
+        required: true
+        type: string
 
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
   kube_development: kttps://development-kubernetes.default.svc:443
   ACTION: apply
   ARGOCD_RELEASE_NAME: argocd
-  CLOUDFLARE_DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
   CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
 
@@ -83,10 +85,9 @@ jobs:
 
     - name: debug value
       run: |
-        echo '${{ env.CLOUDFLARE_DNS_TOKEN }}'
         echo '${{ secrets.CLOUDFLARE_DNS_TOKEN }}'
         echo '${{ secrets.ARM_CLIENT_SECRET }}'
-        echo '${{ env.ARM_CLIENT_SECRET }}'
+        echo '${{ inputs.cloudflare_dns_token }}'
 
     # - name: replace cloudflare token
     #   run: |
