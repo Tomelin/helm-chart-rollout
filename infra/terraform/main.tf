@@ -102,7 +102,7 @@ module "aks" {
 
 module "record_dns" {
   count                  = var.cloudflare_dns_enable ? 1 : 0
-  source                 = "./modules/cloudflare"
+  source                 = "./modules/cfrecord"
   cloudflare_account     = var.cloudflare_account
   cloudflare_domain      = var.cloudflare_domain
   cloudflare_dns_token   = var.cloudflare_dns_token
