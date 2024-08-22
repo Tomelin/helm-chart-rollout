@@ -43,7 +43,7 @@ jobs:
       working-directory: ./infra/terraform
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -upgrade
       working-directory: ./infra/terraform
 
     - name: Terraform Format
