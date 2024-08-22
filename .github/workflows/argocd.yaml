@@ -29,9 +29,9 @@ env:
 jobs:
   deployment:
     runs-on: 'ubuntu-latest'
-    permissions: 
-        contents: read
-        issues: read
+    # permissions: 
+    #     contents: read
+    #     issues: read
     if: ${{ github.env.ACTION }} == 'apply'
 
     steps:
