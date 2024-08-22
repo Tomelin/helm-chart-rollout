@@ -11,7 +11,7 @@ terraform {
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "4.40.0"
+      version = "~> 4.0"
     }
   }
 
@@ -40,6 +40,6 @@ provider "helm" {
   }
 }
 
-# provider "cloudflare" {
-#   api_token = local.cloudflare_dns_token
-# }
+provider "cloudflare" {
+  api_token = local.cloudflare_dns_token
+}
