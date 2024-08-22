@@ -101,7 +101,7 @@ module "aks" {
 }
 
 
-module "cloudflare" {
+module "record_dns" {
   count                  = var.cloudflare_dns_enable ? 1 : 0
   source                 = "./modules/cloudflare"
   cloudflare_account     = var.cloudflare_account

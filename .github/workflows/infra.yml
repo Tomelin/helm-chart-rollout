@@ -37,10 +37,6 @@ jobs:
       with:
         terraform_wrapper: false
 
-    - name: Terraform providers
-      run: terraform providers
-      working-directory: ./infra/terraform
-
     - name: Terraform Init
       run: terraform init -upgrade
       working-directory: ./infra/terraform
