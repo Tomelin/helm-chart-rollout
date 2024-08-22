@@ -64,7 +64,7 @@ jobs:
     - name: debug token02
       run:  |
           echo  $TOKEN
-        env:
+      env:
           TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
 
     - name: Run chart-releaser
