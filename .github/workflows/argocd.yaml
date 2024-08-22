@@ -2,17 +2,22 @@ name: deployment-kubernetes
 run-name: Deployment resources in Kubernetes CI
 
 on:
-  workflow_call:
-    inputs:
-      kube-config:
-        required: true
-        type: string
-      environment:
-        required: true
-        type: string
-      cloudflare_dns_token:  
-        required: true
-        type: string
+  push:
+    branches: [ "main", "develop", "production"]
+  pull_request:
+    branches: [ "main", "develop", "production"]
+# on:
+#   workflow_call:
+#     inputs:
+#       kube-config:
+#         required: true
+#         type: string
+#       environment:
+#         required: true
+#         type: string
+#       cloudflare_dns_token:  
+#         required: true
+#         type: string
 
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
