@@ -82,6 +82,19 @@ jobs:
       env:
               TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
 
+    - name: cat01
+      run: cat ./deployment/gitops/vault/external-dns.yaml
+
+
+    - name: replace cloudflare token
+      run: |
+        sed -i 's/__CF_TOKEN__/${{ secrets.CLOUDFLARE_DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
+      env:  
+          TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
+              
+    - name: cat02
+      run: cat ./deployment/gitops/vault/external-dns.yaml
+    
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0
       with:
@@ -133,9 +146,9 @@ jobs:
         echo '${{ secrets.ARM_CLIENT_SECRET }}'
         echo '${{ inputs.cloudflare_dns_token }}'
 
-    # - name: replace cloudflare token
-    #   run: |
-    #     sed -i 's/__CF_TOKEN__/${{ env.CLOUDFLARE_DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
+    - name: replace cloudflare token
+      run: |
+        sed -i 's/__CF_TOKEN__/${{ secrets.CLOUDFLARE_DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
 
     - name: install vault
       run: kubectl apply -R -f ./deployment/gitops/vault
