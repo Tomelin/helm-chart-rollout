@@ -96,13 +96,16 @@ module "aks" {
   network_profile     = var.network_profile
 }
 
-# resource "cloudflare_record" "www" {
-#   domain  = var.cloudflare_domain
-#   name    = "gitops"
-#   value   = "203.0.113.10"
-#   type    = "A"
-#   proxied = false
-# }
+
+module "cloudflare" {
+  count                  = var.cloudflare_dns_enable ? 1 : 0
+  source                 = "./modules/cloudflare/"
+  cloudflare_account     = var.cloudflare_account
+  cloudflare_domain      = var.cloudflare_domain
+  cloudflare_dns_token   = var.cloudflare_dns_token
+  cloudflare_dns_address = var.cloudflare_dns_address
+}
+
 
 # module "ingress" {
 #   count      = var.enabled_ingress_controller.enabled == true ? 1 : 0
