@@ -72,11 +72,14 @@ jobs:
     - name: install ingress
       run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
       
-    - name: install promethues
-      run: kubectl apply -f ./deployment/gitops/prometheus/controller.yaml
+    - name: install prometheus
+      run: kubectl apply -f ./deployment/gitops/monitoring/prometheus.yaml
 
     - name: install grafana
-      run: kubectl apply -f ./deployment/gitops/grafana/controller.yaml
+      run: kubectl apply -f ./deployment/gitops/monitoring/grafana.yaml
+
+    - name: install vault
+      run: kubectl apply -R -f ./deployment/gitops/vault
       
 
     # - name: install argo rollouts
