@@ -21,6 +21,8 @@ spec:
           value: "true"
         - name: dashboard.ingress.ingressClassName
           value: nginx
+        - name:  dashboard.ingress.hosts
+          values: [rollout.synera.com.br]
   destination:
     namespace: argoproj
     server: 'https://kubernetes.default.svc'
