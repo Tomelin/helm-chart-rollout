@@ -55,7 +55,7 @@ jobs:
 
 
     - name: Terraform ${{ env.ACTION }} a plan
-      run: terraform ${{ env.ACTION }} -var="cloudflare_dns_token=${{ secrets.CLOUDFLARE_DNS_TOKEN }}" -var="cloudflare_account=${{ secrets.CLOUDFLARE_ACCOUNT }}" -parallelism=20 --auto-approve
+      run: terraform ${{ env.ACTION }} -var="cloudflare_dns_token=${{ env.CLOUDFLARE_DNS_TOKEN }}" -var="cloudflare_account=${{ env.CLOUDFLARE_ACCOUNT }}" -parallelism=20 --auto-approve
       working-directory: ./infra/terraform
 
     - name: Terraform output
