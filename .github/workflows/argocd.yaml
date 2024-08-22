@@ -14,7 +14,7 @@ on:
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
   kube_development: kttps://development-kubernetes.default.svc:443
-  ACTION: apply
+  ACTION: destroy
   ARGOCD_RELEASE_NAME: argocd
 
 jobs:
@@ -72,8 +72,8 @@ jobs:
     - name: install ingress
       run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
       
-    - name: install argo rollouts
-      run: kubectl apply -R -f ./deployment/gitops/argoproj/rollout.yaml 
+    # - name: install argo rollouts
+    #   run: kubectl apply -R -f ./deployment/gitops/argoproj/rollout.yaml 
 
     - name: Remove kubeconfig
       run: |
