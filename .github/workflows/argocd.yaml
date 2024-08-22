@@ -36,6 +36,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: Find and Replace
+      uses: jacobtomlinson/gha-find-replace@v3
+      with:
+        find: __CF_TOKEN__
+        replace: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
+        include: ./deployment/gitops/vault/external-dns.yaml
+
     - name: Install Helm
       uses: azure/setup-helm@v4
       with:
