@@ -9,10 +9,10 @@ terraform {
       source  = "hashicorp/helm"
       version = "2.14.0"
     }
-    # cloudflare = {
-    #   source  = "cloudflare/cloudflare"
-    #   version = "4.40.0"
-    # }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "4.40.0"
+    }
   }
 
   backend "azurerm" {
@@ -40,6 +40,6 @@ provider "helm" {
   }
 }
 
-# provider "cloudflare" {
-#   api_token = local.cloudflare_dns_token
-# }
+provider "cloudflare" {
+  api_token = local.cloudflare_dns_token
+}
