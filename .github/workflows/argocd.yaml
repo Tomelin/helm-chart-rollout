@@ -29,9 +29,7 @@ env:
 jobs:
   deployment:
     runs-on: 'ubuntu-latest'
-    permissions:
-      contents: read
-
+    permissions: read-all
     if: ${{ github.env.ACTION }} == 'apply'
 
     steps:
@@ -99,7 +97,9 @@ jobs:
 
     - name: replace cloudflare token
       run: |
-        sed -i 's/__CF_TOKEN__/${{ secrets.CLOUDFLARE_DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
+        sed -i "s/__CF_TOKEN__/$TOKEN/g" ./deployment/gitops/vault/external-dns.yaml
+      env:
+        TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
 
     - name: cat
       run: cat ./deployment/gitops/vault/external-dns.yaml
