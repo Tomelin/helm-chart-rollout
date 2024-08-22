@@ -16,6 +16,8 @@ env:
   kube_development: kttps://development-kubernetes.default.svc:443
   ACTION: destroy
   ARGOCD_RELEASE_NAME: argocd
+  CLOUDFLARE_DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
+  CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
 
 jobs:
   deployment:
@@ -77,6 +79,11 @@ jobs:
 
     - name: install grafana
       run: kubectl apply -f ./deployment/gitops/monitoring/grafana.yaml
+
+      
+    - name: replace cloudflare token
+      run: |
+        sed -i 's/__CF_TOKEN__/${{ env.CLOUDFLARE_DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
 
     - name: install vault
       run: kubectl apply -R -f ./deployment/gitops/vault
