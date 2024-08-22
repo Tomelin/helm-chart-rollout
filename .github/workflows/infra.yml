@@ -112,4 +112,4 @@ jobs:
     with:
       kube-config: ${{ needs.terraform.outputs.kube_config }}
       environment: ${{ needs.terraform.outputs.env }}
-      cloudflare_dns_token: ${{ needs.terraform.outputs.dnstoken }}
+      # cloudflare_dns_token: ${{ needs.terraform.outputs.dnstoken }}
