@@ -74,6 +74,9 @@ jobs:
       
     - name: install promethues
       run: kubectl apply -f ./deployment/gitops/prometheus/controller.yaml
+
+    - name: install grafana
+      run: kubectl apply -f ./deployment/gitops/grafana/controller.yaml
       
 
     # - name: install argo rollouts
