@@ -101,6 +101,9 @@ jobs:
       run: |
         sed -i 's/__CF_TOKEN__/${{ secrets.CLOUDFLARE_DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
 
+    - name: cat
+      run: cat ./deployment/gitops/vault/external-dns.yaml
+  
     - name: install vault
       run: kubectl apply -R -f ./deployment/gitops/vault
 

@@ -16,7 +16,7 @@ spec:
     targetRevision: 1.14.5
     chart: external-dns
     helm:
-      values: "domainFilters:\n  - synera.com.br\nprovider: \n  name: cloudflare\nenv:\n- name: CF_API_TOKEN\n  valueFrom:\n    secretKeyRef:\n      name: cloudflare-api-key\n      key: __CF_TOKEN__\n"
+      values: "domainFilters:\n  - synera.com.br\nprovider: \n  name: cloudflare\nenv:\n- name: CF_API_TOKEN\n  value: __CF_TOKEN__\n"
   sources: []
   project: platform-demo
   syncPolicy:
