@@ -19,7 +19,11 @@ locals {
   environment    = "development"
 
   kube = module.aks[0].raw
+
+  cloudflare_account   = var.cloudflare_account
+  cloudflare_dns_token = var.cloudflare_dns_token
 }
+
 
 module "resource_group" {
   source   = "./modules/rsg"
