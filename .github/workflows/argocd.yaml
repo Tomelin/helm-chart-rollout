@@ -2,27 +2,22 @@ name: deployment-kubernetes
 run-name: Deployment resources in Kubernetes CI
 
 on:
-  push:
-    branches: [ "main", "develop", "production"]
-  pull_request:
-    branches: [ "main", "develop", "production"]
-# on:
-#   workflow_call:
-#     inputs:
-#       kube-config:
-#         required: true
-#         type: string
-#       environment:
-#         required: true
-#         type: string
-#       cloudflare_dns_token:  
-#         required: true
-#         type: string
+  workflow_call:
+    inputs:
+      kube-config:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      cloudflare_dns_token:  
+        required: true
+        type: string
 
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
   kube_development: kttps://development-kubernetes.default.svc:443
-  ACTION: destroy
+  ACTION: apply
   ARGOCD_RELEASE_NAME: argocd
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
@@ -50,50 +45,6 @@ jobs:
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-    - name: debug secrets CLOUDFLARE_DNS_TOKEN
-      run: echo '${{ secrets.CLOUDFLARE_DNS_TOKEN }}'
-        
-    - name: debug secrets ARM_CLIENT_SECRET
-      run: echo '${{ secrets.ARM_CLIENT_SECRET }}'
-
-    - name: debug inputs cloudflare_dns_token
-      run:  echo '${{ inputs.cloudflare_dns_token }}'
-
-    - name: debug inputs kube-config
-      run:  echo '${{ inputs.kube-config }}'
-
-    - name: debug token01
-      run:  |
-        echo "$(echo $TOKEN)"
-        echo "TOKEN=$(echo $TOKEN)" >> $GITHUB_OUTPUT
-      env:
-        TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
-
-    - name: debug token02
-      run:  |
-          echo  $TOKEN
-      env:
-          TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
-
-    - name: debug token04
-      run:  |
-              echo  $TOKEN
-              echo ${{ secrets }}
-      env:
-              TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
-
-    - name: cat01
-      run: cat ./deployment/gitops/vault/external-dns.yaml
-
-
-    - name: replace cloudflare token
-      run: |
-        sed -i 's/__CF_TOKEN__/${{ secrets.CLOUDFLARE_DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
-      env:  
-          TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
-              
-    - name: cat02
-      run: cat ./deployment/gitops/vault/external-dns.yaml
     
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0

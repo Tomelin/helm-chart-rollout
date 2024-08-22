@@ -14,7 +14,7 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   CLOUDFLARE_DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
   CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
-  ACTION: destroy
+  ACTION: apply
 
 jobs:
   terraform:
@@ -104,12 +104,12 @@ jobs:
         echo "::set-output name=DNSTOKEN::$OUTPUT"
       working-directory: ./infra/terraform
 
-  # call_install_argocd:
-  #   name: Install ArgocdCD
-  #   uses: ./.github/workflows/argocd.yaml 
-  #   needs: terraform
-  #   if: ${{ needs.terraform.result }} == 'success'
-  #   with:
-  #     kube-config: ${{ needs.terraform.outputs.kube_config }}
-  #     environment: ${{ needs.terraform.outputs.env }}
-  #     cloudflare_dns_token: ${{ needs.terraform.outputs.dnstoken }}
+  call_install_argocd:
+    name: Install ArgocdCD
+    uses: ./.github/workflows/argocd.yaml 
+    needs: terraform
+    if: ${{ needs.terraform.result }} == 'success'
+    with:
+      kube-config: ${{ needs.terraform.outputs.kube_config }}
+      environment: ${{ needs.terraform.outputs.env }}
+      cloudflare_dns_token: ${{ needs.terraform.outputs.dnstoken }}
