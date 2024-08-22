@@ -23,7 +23,7 @@ jobs:
     outputs:
       kube_config: ${{ steps.aks_cluster_name.outputs.CONFIG }}
       env: ${{ steps.environment.outputs.ENV }}
-      dns_token: ${{ steps.environment.outputs.DNS_TOKEN }}
+      dnstoken: ${{ steps.dnstoken.outputs.DNSTOKEN }}
 
     defaults:
       run:
@@ -98,10 +98,10 @@ jobs:
       working-directory: ./infra/terraform
 
     - name: Terraform output environment
-      id: dns_token
+      id: dnstoken
       run: |
         OUTPUT=${{ secrets.CLOUDFLARE_DNS_TOKEN }}
-        echo "::set-output name=DNS_TOKEN::$OUTPUT"
+        echo "::set-output name=DNSTOKEN::$OUTPUT"
       working-directory: ./infra/terraform
 
   call_install_argocd:
@@ -112,4 +112,4 @@ jobs:
     with:
       kube-config: ${{ needs.terraform.outputs.kube_config }}
       environment: ${{ needs.terraform.outputs.env }}
-      cloudflare_dns_token: ${{ needs.terraform.outputs.dns_token }}
+      cloudflare_dns_token: ${{ needs.terraform.outputs.dnstoken }}
