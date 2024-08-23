@@ -3,6 +3,9 @@ run-name: Deployment resources in Kubernetes CI
 
 on:
   workflow_call:
+    secrets:
+        PRIVATE_KEY:
+            required: true
     inputs:
       kube-config:
         required: true
@@ -50,16 +53,20 @@ jobs:
         echo '${{ secrets.CLOUDFLARE_DNS_TOKEN }}'
         echo '${{ env.CLOUDFLARE_DNS_TOKEN }}'
         echo '${{ inputs.cloudflare_dns_token }}'
+        echo '${{ secrets.PRIVATE_KEY }}'
+        
 
     - name: debug value
       run: |
         echo $(echo $TOKEN)
         echo $ARM
         echo $DNS
+        echo $KEY
       env:
         TOKEN: "${{ secrets.CLOUDFLARE_DNS_TOKEN }}"
         ARM: "${{ secrets.ARM_CLIENT_SECRET }}"
         DNS: "${{ inputs.cloudflare_dns_token }}"
+        KEY: '${{ secrets.PRIVATE_KEY }}'
     
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0
