@@ -110,7 +110,7 @@ jobs:
 
         while true;do
           OK=$(kubectl -n vault get pods hashicorp-vault-0 --ignore-not-found=true|wc -l|sed 's/ //g')
-          if [[ $OK -eq 0 ]]; then
+          if [[ $OK -gt 0 ]]; then
             break
           fi
 
