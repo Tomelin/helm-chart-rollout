@@ -105,6 +105,14 @@ jobs:
     - name: install vault
       run: kubectl apply -R -f ./deployment/gitops/vault
 
+        
+    - name: unseal vault
+      run: |
+        kubectl -n vault exec vault-0 -- vault operator init \
+        -key-shares=3 \
+        -key-threshold=1 \
+        -format=json 
+
     - name: Remove kubeconfig
       run: |
             rm -rf ~/.kube

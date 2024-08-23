@@ -26,18 +26,16 @@ spec:
             enabled: false
           standalone:
             enabled: true
-            config: |
-              disable_mlock = true
-              ui=true
+            ui = true
 
-              storage "file" {
-                path = "/vault/data"
-              }
-
-              listener "tcp" {
-                address     = "127.0.0.1:8200"
-                tls_disable = "true"
-              }
+            listener "tcp" {
+              tls_disable = 1
+              address = "[::]:8200"
+              cluster_address = "[::]:8201"
+            }
+            storage "file" {
+              path = "/vault/data"
+            }
 
   sources: []
   project: platform-demo
