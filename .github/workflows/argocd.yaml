@@ -109,8 +109,8 @@ jobs:
         ponderado=0
 
         while true;do
-          kubectl -n vault get pods hashicorp-vault-0
-          if [[ $? -eq 0 ]]; then
+          OK=$(kubectl -n vault get pods hashicorp-vault-0 --ignore-not-found=true|wc -l|sed 's/ //g')
+          if [[ $OK -eq 0 ]]; then
             break
           fi
 
