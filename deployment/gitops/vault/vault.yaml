@@ -8,13 +8,13 @@ metadata:
 spec:
   destination:
     name: ''
-    namespace: vault
+    namespace: vault2
     server: https://kubernetes.default.svc
   source:
     path: ''
     repoURL: https://helm.releases.hashicorp.com
     targetRevision: 0.28.1
-    chart: vault2
+    chart: vault
     helm:
       values: |
         ui:
