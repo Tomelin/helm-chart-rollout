@@ -114,11 +114,13 @@ jobs:
 
           if [[ $OK -gt 0 ]]; then
             result=$((count + increment + ponderado))
+            echo "ponderado is: $result"
             sleep $result
             break
           fi
 
           ponderado=$((ponderado + count * pesos[count % ${#pesos[@]}]))
+          echo "ponderado is: $ponderado"
 
           count=$((count + increment))
           sleep $ponderado
@@ -148,8 +150,8 @@ jobs:
         kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY4
         kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY5
 
-        kubectl -n vault exec hashicorp-vault-0 -- vault token create
-        kubectl -n vault exec hashicorp-vault-0 -- vault write -address="http://127.0.0.1:8200" auth/userpass/users/bob password="long-password"
+        kubectl -n vault exec hashicorp-vault-0 -- vault login token=$ROOT
+        kubectl -n vault exec hashicorp-vault-0 -- vault kv put -mount=secret platform foo=world
 
     - name: vault status
       run: |
