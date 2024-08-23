@@ -96,7 +96,7 @@ jobs:
 
     - name: replace secrets
       run: |
-        sed -i "s/__CF_TOKEN__/${{ secrets.CLOUDFLARE_DNS_TOKEN }}/g" ./deployment/gitops/vault/external-dns.yaml
+        sed -i 's/__CF_TOKEN__/${{ secrets.DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
 
     - name: check deployment file
       run: |
