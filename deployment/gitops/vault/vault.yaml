@@ -34,7 +34,7 @@ spec:
               cluster_address = "[::]:8201"
             }
             storage "file" {
-              path = "/vault/data1"
+              path = "/vault/data"
             }
 
   sources: []
