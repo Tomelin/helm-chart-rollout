@@ -106,8 +106,23 @@ jobs:
 
     - name: unseal vault
       run: |
-        SEAL=$(kubectl -n vault exec hashicorp-vault-0 -- vault operator init)
-        echo $SEAL
+        kubectl -n vault exec hashicorp-vault-0 -- vault operator init > ~/.kube/vault
+        KEY1=$(cat ~/.kube/vault |sed -n 1p | awk -F ':' '{ print $2 }')
+        echo $KEY1
+        KEY2=$(cat ~/.kube/vault |sed -n 2p | awk -F ':' '{ print $2 }')
+        echo $KEY2
+        KEY3=$(cat ~/.kube/vault |sed -n 3p | awk -F ':' '{ print $2 }')
+        echo $KEY3
+        KEY4=$(cat ~/.kube/vault |sed -n 4p | awk -F ':' '{ print $2 }')
+        echo $KEY4
+        KEY5=$(cat ~/.kube/vault |sed -n 5p | awk -F ':' '{ print $2 }')
+        echo $KEY5
+
+        kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY1
+        kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY2
+        kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY3
+        kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY4
+        kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY5
 
     - name: Remove kubeconfig
       run: |
