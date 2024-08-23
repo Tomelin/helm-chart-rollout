@@ -108,10 +108,7 @@ jobs:
         
     - name: unseal vault
       run: |
-        SEAL=$(kubectl -n vault exec hashicorp-vault-0 -- vault operator init \
-        -key-shares=3 \
-        -key-threshold=1 \
-        -format=json)
+        SEAL=$(kubectl -n vault exec hashicorp-vault-0 -- vault operator init)
 
         echo $SEAL
 
