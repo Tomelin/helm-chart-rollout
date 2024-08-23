@@ -98,9 +98,8 @@ jobs:
     #   run: |
     #     cat ./deployment/gitops/vault/external-dns.yaml
   
-    - name: install vault
-      run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
-
+    # - name: install vault
+    #   run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
         
     - name: unseal vault
       run: |
