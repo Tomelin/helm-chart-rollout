@@ -114,18 +114,11 @@ jobs:
 
           if [[ $OK -gt 0 ]]; then
             result=$((count + increment + ponderado))
-            echo "soma ponderada é: $ponderado"
-            echo "count é: $count"
-            echo "count é: $increment"
-            echo "result é: $result"
             sleep $result
             break
           fi
 
           ponderado=$((ponderado + count * pesos[count % ${#pesos[@]}]))
-          echo "soma ponderada é: $ponderado"
-          echo "count é: $count"
-          echo "count é: $increment"
 
           count=$((count + increment))
           sleep $ponderado
@@ -153,6 +146,23 @@ jobs:
         kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY3
         kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY4
         kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY5
+
+    - name: vault status
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault status
+
+    - name: create policy 
+      run: |
+          kubectl -n vault exec hashicorp-vault-0 -- vault policy write my-policy - << EOF
+            path "secret/data/*" {
+              capabilities = ["create", "update"]
+            }
+
+            path "secret/data/foo" {
+              capabilities = ["read"]
+            }
+            EOF
+
 
     - name: Remove kubeconfig
       run: |
