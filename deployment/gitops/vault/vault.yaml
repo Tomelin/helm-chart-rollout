@@ -3,8 +3,8 @@ kind: Application
 metadata:
   name: hashicorp-vault
   namespace: argoproj
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
+  # finalizers:
+  # - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     name: ''
@@ -27,16 +27,6 @@ spec:
           standalone:
             enabled: true
             ui = true
-
-            listener "tcp" {
-              tls_disable = 1
-              address = "[::]:8200"
-              cluster_address = "[::]:8201"
-            }
-
-            storage "file" {
-              path = "/vault/data"
-            }
 
   sources: []
   project: platform-demo
