@@ -151,17 +151,10 @@ jobs:
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault status
 
-    - name: create policy 
+    - name: list policy 
       run: |
-          kubectl -n vault exec hashicorp-vault-0 -- vault policy write my-policy - << EOF
-            path "secret/data/*" {
-              capabilities = ["create", "update"]
-            }
-
-            path "secret/data/foo" {
-              capabilities = ["read"]
-            }
-            EOF
+        kubectl -n vault exec hashicorp-vault-0 --vault policy list
+           
 
 
     - name: Remove kubeconfig
