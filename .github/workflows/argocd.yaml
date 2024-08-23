@@ -108,10 +108,12 @@ jobs:
         
     - name: unseal vault
       run: |
-        kubectl -n vault exec vault-0 -- vault operator init \
+        SEAL=$(kubectl -n vault exec vault-0 -- vault operator init \
         -key-shares=3 \
         -key-threshold=1 \
-        -format=json 
+        -format=json)
+
+        echo $SEAL
 
     - name: Remove kubeconfig
       run: |
