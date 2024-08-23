@@ -102,9 +102,9 @@ jobs:
       run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
         
-    # - name: unseal vault
-    #   run: |
-    #     kubectl -n vault exec hashicorp-vault-0 -- vault operator init
+    - name: unseal vault
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault operator init
 
     - name: Remove kubeconfig
       run: |
