@@ -105,23 +105,38 @@ jobs:
       run: |
         count=0
         increment=5
+        pesos=(1 2 3 4 5)
+        ponderado=0
 
-        for 
-        sleep 180
+        while true;do
+          kubectl -n vault get pods hashicorp-vault-0 2> /dev/null
+          if [[ $? -eq 0 ]]; then
+            break
+          fi
+
+          ponderado=$((ponderado + count * pesos[count * ${#pesos[@]}]))
+          echo "soma ponderada é: $ponderado"
+
+          count=$((count + increment))
+          sleep $ponderado
+        done
+        
 
     - name: unseal vault
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault operator init > ~/.kube/vault
-        KEY1=$(cat ~/.kube/vault |sed -n 1p | awk -F ':' '{ print $2 }')
+        KEY1=$(cat ~/.kube/vault |sed -n 1p | awk -F ': ' '{ print $2 }')
         echo $KEY1
-        KEY2=$(cat ~/.kube/vault |sed -n 2p | awk -F ':' '{ print $2 }')
+        KEY2=$(cat ~/.kube/vault |sed -n 2p | awk -F ': ' '{ print $2 }')
         echo $KEY2
-        KEY3=$(cat ~/.kube/vault |sed -n 3p | awk -F ':' '{ print $2 }')
+        KEY3=$(cat ~/.kube/vault |sed -n 3p | awk -F ': ' '{ print $2 }')
         echo $KEY3
-        KEY4=$(cat ~/.kube/vault |sed -n 4p | awk -F ':' '{ print $2 }')
+        KEY4=$(cat ~/.kube/vault |sed -n 4p | awk -F ': ' '{ print $2 }')
         echo $KEY4
-        KEY5=$(cat ~/.kube/vault |sed -n 5p | awk -F ':' '{ print $2 }')
+        KEY5=$(cat ~/.kube/vault |sed -n 5p | awk -F ': ' '{ print $2 }')
         echo $KEY5
+        ROOT=$(cat ~/.kube/vault |grep '^Initial'| awk -F ': ' '{ print $2 }')
+        echo $ROOT
 
         kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY1
         kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY2
