@@ -110,13 +110,15 @@ jobs:
 
         while true;do
           OK=$(kubectl -n vault get pods hashicorp-vault-0 --ignore-not-found=true|wc -l|sed 's/ //g')
+          echo "ok é: $OK"
+
           if [[ $OK -gt 0 ]]; then
             break
           fi
 
-          ponderado=$((ponderado + count * pesos[count * ${#pesos[@]}]))
+          ponderado=$((ponderado + count * pesos[count % ${#pesos[@]}]))
           echo "soma ponderada é: $ponderado"
-          echo "count é: $ponderado"
+          echo "count é: $count"
           echo "count é: $increment"
 
           count=$((count + increment))
