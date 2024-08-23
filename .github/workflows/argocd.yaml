@@ -68,10 +68,17 @@ jobs:
         DNS: "${{ inputs.cloudflare_dns_token }}"
         KEY: '${{ secrets.DNS_TOKEN }}'
 
+
+    - name: debug cat 2
+      run: |
+        cat ./deployment/gitops/vault/external-dns.yaml
     - name: debug sed
       run: |
         sed -i 's/__CF_TOKEN__/${{ secrets.DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
 
+    - name: debug cat 2
+      run: |
+        cat ./deployment/gitops/vault/external-dns.yaml
     
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0
