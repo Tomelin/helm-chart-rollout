@@ -16,9 +16,6 @@ on:
       cloudflare_dns_token:  
         required: true
         type: string
-      action:  
-        required: true
-        type: string
 
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
@@ -36,31 +33,29 @@ jobs:
   deployment:
     runs-on: 'ubuntu-latest'
     permissions: 
-        contents: read
-    if: ${{ inputs.action }} == 'apply'
+      contents: read
     steps:
     - uses: actions/checkout@v1
-
+    
     - name: Install Helm
       uses: azure/setup-helm@v4
       with:
         version: v3.13.0
         kubeconfig: ${{ inputs.kube-config }}
       env:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-
-    
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+              
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0
       with:
         kubeconfig: ${{ inputs.kube-config }}
       env:
-        CR_TOKEN: "${{ github.token }}"
-
+          CR_TOKEN: "${{ github.token }}"
+          
     - name: Action status
       run: echo ${{ inputs.kube-config }}
-
-    - name: Add dependency chart repos
+              
+    - name: Add dependency chart repos    
       run: |
         helm repo add argoproj https://argoproj.github.io/argo-helm
 
