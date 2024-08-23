@@ -96,8 +96,11 @@ jobs:
 
     - name: replace secrets
       run: |
-        TOKEN=$(echo ${{ secrets.DNS_TOKEN }} |base64 -d -w0)
-        sed -i "s/__CF_TOKEN__/${TOKEN}/g" ./deployment/gitops/vault/external-dns.yaml
+        # TOKEN=$(echo ${{ secrets.DNS_TOKEN }} |base64 -d -w0)
+        # sed -i "s/__CF_TOKEN__/${TOKEN}/g" ./deployment/gitops/vault/external-dns.yaml
+        echo $TOKEN
+      env:
+        TOKEN: ${{ secrets.DNS_TOKEN }}
 
     - name: check deployment file
       run: |
