@@ -20,7 +20,7 @@ on:
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
   kube_development: kttps://development-kubernetes.default.svc:443
-  ACTION: destroy
+  ACTION: apply
   ARGOCD_RELEASE_NAME: argocd
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
@@ -48,37 +48,6 @@ jobs:
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-    - name: debug value1
-      run: |
-        echo '${{ secrets.CLOUDFLARE_DNS_TOKEN }}'
-        echo '${{ env.CLOUDFLARE_DNS_TOKEN }}'
-        echo '${{ inputs.cloudflare_dns_token }}'
-        echo '${{ secrets.DNS_TOKEN }}'
-        
-
-    - name: debug value2
-      run: |
-        echo $(echo $TOKEN)
-        echo $ARM
-        echo $DNS
-        echo $KEY
-      env:
-        TOKEN: "${{ secrets.CLOUDFLARE_DNS_TOKEN }}"
-        ARM: "${{ secrets.ARM_CLIENT_SECRET }}"
-        DNS: "${{ inputs.cloudflare_dns_token }}"
-        KEY: '${{ secrets.DNS_TOKEN }}'
-
-
-    - name: debug cat 2
-      run: |
-        cat ./deployment/gitops/vault/external-dns.yaml
-    - name: debug sed
-      run: |
-        sed -i 's/__CF_TOKEN__/${{ secrets.DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
-
-    - name: debug cat 2
-      run: |
-        cat ./deployment/gitops/vault/external-dns.yaml
     
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0
@@ -125,13 +94,11 @@ jobs:
     - name: install grafana
       run: kubectl apply -f ./deployment/gitops/monitoring/grafana.yaml
 
-    - name: debug value
+    - name: replace secrets
       run: |
-        echo '${{ secrets.CLOUDFLARE_DNS_TOKEN }}'
-        echo '${{ secrets.ARM_CLIENT_SECRET }}'
-        echo '${{ inputs.cloudflare_dns_token }}'
+        sed -i 's/__CF_TOKEN__/${{ secrets.DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
 
-    - name: cat
+    - name: check deployment file
       run: |
         cat ./deployment/gitops/vault/external-dns.yaml
   
