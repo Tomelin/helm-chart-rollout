@@ -101,7 +101,7 @@ jobs:
     - name: install vault
       run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
-    - name: sleep 180
+    - name: wait vault is running
       continue-on-error: true
       run: |
         count=0

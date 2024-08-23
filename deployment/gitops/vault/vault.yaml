@@ -14,7 +14,7 @@ spec:
     path: ''
     repoURL: https://helm.releases.hashicorp.com
     targetRevision: 0.28.1
-    chart: vault
+    chart: vault2
     helm:
       values: |
         ui:
