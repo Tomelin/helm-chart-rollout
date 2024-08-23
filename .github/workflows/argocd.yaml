@@ -108,9 +108,7 @@ jobs:
         
     - name: unseal vault
       run: |
-        SEAL=$(kubectl -n vault exec hashicorp-vault-0 -- vault operator init)
-
-        echo $SEAL
+        kubectl -n vault exec hashicorp-vault-0 -- vault operator init
 
     - name: Remove kubeconfig
       run: |
