@@ -16,6 +16,9 @@ on:
       cloudflare_dns_token:  
         required: true
         type: string
+      action:  
+        required: true
+        type: string
 
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
@@ -34,9 +37,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     permissions: 
         contents: read
-
-    if: ${{ github.env.ACTION }} == 'apply'
-
+    if: ${{ inputs.action }} == 'apply'
     steps:
     - uses: actions/checkout@v1
 
