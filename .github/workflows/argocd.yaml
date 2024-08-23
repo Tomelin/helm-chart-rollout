@@ -48,12 +48,12 @@ jobs:
     - name: debug value
       run: |
         echo '${{ secrets.CLOUDFLARE_DNS_TOKEN }}'
-        echo '${{ secrets.ARM_CLIENT_SECRET }}'
+        echo '${{ env.CLOUDFLARE_DNS_TOKEN }}'
         echo '${{ inputs.cloudflare_dns_token }}'
 
     - name: debug value
       run: |
-        echo $TOKEN
+        echo $(echo $TOKEN)
         echo $ARM
         echo $DNS
       env:
