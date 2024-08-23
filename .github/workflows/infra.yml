@@ -107,7 +107,7 @@ jobs:
       contents: read
     if: ${{ needs.terraform.result }} == 'success'
     secrets:
-        PRIVATE_KEY: "ok"
+        DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
     with:
       kube-config: ${{ needs.terraform.outputs.kube_config }}
       environment: ${{ needs.terraform.outputs.env }}
