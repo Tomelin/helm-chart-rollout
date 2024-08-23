@@ -15,18 +15,7 @@ spec:
     repoURL: https://helm.releases.hashicorp.com
     targetRevision: 0.28.1
     chart: vault
-    helm:
-      values: |
-        ui:
-          enabled: false
-          serviceType: "ClusterIP"
-        server:
-          affinity: ""
-          ha:
-            enabled: false
-          standalone:
-            enabled: true
-            ui = true
+
 
   sources: []
   project: platform-demo
