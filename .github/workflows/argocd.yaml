@@ -102,7 +102,6 @@ jobs:
       run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
     - name: wait vault is running
-      continue-on-error: true
       run: |
         count=0
         increment=5
@@ -110,7 +109,7 @@ jobs:
         ponderado=0
 
         while true;do
-          kubectl -n vault2 get pods hashicorp-vault-0 2> /dev/null
+          kubectl -n vault get pods hashicorp-vault-0
           if [[ $? -eq 0 ]]; then
             break
           fi

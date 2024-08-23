@@ -8,7 +8,7 @@ metadata:
 spec:
   destination:
     name: ''
-    namespace: vault2
+    namespace: vault
     server: https://kubernetes.default.svc
   source:
     path: ''
