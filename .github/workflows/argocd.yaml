@@ -85,25 +85,25 @@ jobs:
     - name: install projects
       run: kubectl apply -R -f ./deployment/gitops/project
 
-    - name: install ingress
-      run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
+    # - name: install ingress
+    #   run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
       
-    - name: install prometheus
-      run: kubectl apply -f ./deployment/gitops/monitoring/prometheus.yaml
+    # - name: install prometheus
+    #   run: kubectl apply -f ./deployment/gitops/monitoring/prometheus.yaml
 
-    - name: install grafana
-      run: kubectl apply -f ./deployment/gitops/monitoring/grafana.yaml
+    # - name: install grafana
+    #   run: kubectl apply -f ./deployment/gitops/monitoring/grafana.yaml
 
-    - name: replace secrets
-      run: |
-        sed -i 's/__CF_TOKEN__/${{ secrets.DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
+    # - name: replace secrets
+    #   run: |
+    #     sed -i 's/__CF_TOKEN__/${{ secrets.DNS_TOKEN }}/g' ./deployment/gitops/vault/external-dns.yaml
 
-    - name: check deployment file
-      run: |
-        cat ./deployment/gitops/vault/external-dns.yaml
+    # - name: check deployment file
+    #   run: |
+    #     cat ./deployment/gitops/vault/external-dns.yaml
   
     - name: install vault
-      run: kubectl apply -R -f ./deployment/gitops/vault
+      run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
         
     - name: unseal vault
