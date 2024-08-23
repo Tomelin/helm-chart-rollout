@@ -103,8 +103,10 @@ jobs:
     name: Install ArgocdCD
     uses: ./.github/workflows/argocd.yaml 
     needs: terraform
+    permissions:
+      contents: read
     if: ${{ needs.terraform.result }} == 'success'
     with:
       kube-config: ${{ needs.terraform.outputs.kube_config }}
       environment: ${{ needs.terraform.outputs.env }}
-      cloudflare_dns_token: "teste"
+      cloudflare_dns_token: ${{ needs.terraform.outputs.dnstoken }}

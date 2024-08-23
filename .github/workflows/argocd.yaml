@@ -45,6 +45,21 @@ jobs:
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
+    - name: debug value
+      run: |
+        echo '${{ secrets.CLOUDFLARE_DNS_TOKEN }}'
+        echo '${{ secrets.ARM_CLIENT_SECRET }}'
+        echo '${{ inputs.cloudflare_dns_token }}'
+
+    - name: debug value
+      run: |
+        echo $TOKEN
+        echo $ARM
+        echo $DNS
+      env:
+        TOKEN: "${{ secrets.CLOUDFLARE_DNS_TOKEN }}"
+        ARM: "${{ secrets.ARM_CLIENT_SECRET }}"
+        DNS: "${{ inputs.cloudflare_dns_token }}"
     
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.6.0
