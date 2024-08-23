@@ -101,8 +101,8 @@ jobs:
     - name: install vault
       run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
-    - name: sleep 180
-      run: sleep 180
+    # - name: sleep 180
+    #   run: sleep 180
 
     - name: unseal vault
       run: |
