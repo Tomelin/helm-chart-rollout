@@ -101,20 +101,6 @@ jobs:
     #   run: |
     #     cat ./deployment/gitops/vault/external-dns.yaml
   
-    - name: source
-      id: source
-      run: | 
-        ROOT=""mytoken-hvs.IUI4nL2EpKSIm7YOvYIcw85b
-        echo $ROOT
-        echo "root_token=$(echo $ROOT)" >> $GITHUB_OUTPUT
-
-    - name: destination
-      run: |
-        echo ${{ steps.source.outputs.root_token }}
-
-    - name: exit
-      run: exit 1
-
     - name: install vault
       run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
@@ -175,7 +161,7 @@ jobs:
       run: echo ${{ steps.unseal.outputs.root_token }}
     - name: vault login
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ vars.VAULT_TOKEN }}
+        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ steps.unseal.outputs.root_token }}
 
     - name: vault enable kv
       run: |
