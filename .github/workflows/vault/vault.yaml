@@ -22,6 +22,10 @@ jobs:
       vault_root_token: ${{ steps.unseal.outputs.root_token }}
     permissions: 
       contents: read
+
+    defaults:
+      run:
+          shell: bash
     steps:
     - uses: actions/checkout@v1
     
