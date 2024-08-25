@@ -109,7 +109,8 @@ jobs:
         echo "root_token=$(echo $ROOT)" >> $GITHUB_OUTPUT
 
     - name: destination
-      run: echo ${{ steps.unseal.outputs.root_token }}
+      run: |
+        echo ${{ steps.source.outputs.root_token }}
 
     - name: exit
       run: exit 1
