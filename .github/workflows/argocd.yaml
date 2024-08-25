@@ -16,6 +16,9 @@ on:
       cloudflare_dns_token:  
         required: true
         type: string
+      vault_token:
+        required: false
+        type: string
 
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
@@ -155,7 +158,7 @@ jobs:
 
     - name: vault login
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ env.VAULT_TOKEN}}
+        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ vars.VAULT_TOKEN }}
 
     - name: vault status
       run: |
