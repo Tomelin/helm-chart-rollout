@@ -175,14 +175,14 @@ jobs:
       run: |
           rm -rf ~/.kube
 
-  call_install_external_secret:
-    name: Link hashicopr Vault and External Secret
-    uses: ./.github/workflows/vault/es-vault.yaml 
-    needs: deployment
-    permissions:
-      contents: read
-    if: ${{ needs.deployment.result }} == 'success'
-    with:
-      kube_config: ${{ needs.deployment.outputs.kube_config }}
-      vault_root_token:  ${{ needs.deployment.outputs.vault_root_token }}
+  # call_install_external_secret:
+  #   name: Link hashicopr Vault and External Secret
+  #   uses: ./.github/workflows/vault/es-vault.yaml 
+  #   needs: deployment
+  #   permissions:
+  #     contents: read
+  #   if: ${{ needs.deployment.result }} == 'success'
+  #   with:
+  #     kube_config: ${{ needs.deployment.outputs.kube_config }}
+  #     vault_root_token:  ${{ needs.deployment.outputs.vault_root_token }}
         
