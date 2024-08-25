@@ -91,32 +91,42 @@ jobs:
       run: echo ${{ steps.unseal.outputs.root_token }}
     - name: vault login
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ steps.unseal.outputs.root_token }}
+        # kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ steps.unseal.outputs.root_token }}
+        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ vars.VAULT_TOKEN }}
 
-    - name: vault enable kv
+    # - name: vault enable kv
+    #   run: |
+    #     kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 -path=platform6 kv
+
+    - name: vault enable kubernetes
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 -path=platform6 kv
+          kubectl -n vault exec hashicorp-vault-0 -- vault auth enable kubernetes
 
     - name: vault copy policies
       run: |
           kubectl -n vault cp ./deployment/gitops/vault/policies/user.hcl hashicorp-vault-0:/tmp/user.hcl
           kubectl -n vault cp ./deployment/gitops/vault/policies/k8s.hcl hashicorp-vault-0:/tmp/k8s.hcl
+          kubectl -n vault cp ./deployment/gitops/vault/policies/external-secret.hcl hashicorp-vault-0:/tmp/external-secret.hcl
 
-    - name: vault create user policy
-      run: |
-        kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-user /tmp/user.hcl
+    # - name: vault create user policy
+    #   run: |
+    #     kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-user /tmp/user.hcl
 
-    - name: vault create k8s policy
-      run: |
-          kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/k8s.hcl
+    # - name: vault create k8s policy
+    #   run: |
+    #       kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/k8s.hcl
 
-    - name: vault create token for user
+    - name: vault create external secret policy
       run: |
-          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-user -display-name=platform6-user
+        kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/external-secret.hcl
+    
+    # - name: vault create token for user
+    #   run: |
+    #       kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-user -display-name=platform6-user
               
-    - name: vault create token for k8s
-      run: |
-          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-k8s -display-name=platform6-k8s                  
+    # - name: vault create token for k8s
+    #   run: |
+    #       kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-k8s -display-name=platform6-k8s                  
     
     - name: vault status
       run: |
@@ -129,3 +139,14 @@ jobs:
     - name: vault put secret kv
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault kv put platform6/gitops user=teste
+
+    - name: vault put secret kv
+      run: |
+        k8s_host="$(kubectl exec hashicorp-vault-0 -n vault -- printenv | grep KUBERNETES_PORT_443_TCP_ADDR | cut -f 2- -d "=" | tr -d " ")"
+        k8s_port="443"            
+        k8s_cacert="$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 --decode)"
+        tr_account_token="$(kubectl  -n vault get secret vault-auth -o jsonpath='{ .data.token }' | base64 --decode)"
+
+    - name: Remove kubeconfig
+      run: |
+          rm -rf ~/.kube
