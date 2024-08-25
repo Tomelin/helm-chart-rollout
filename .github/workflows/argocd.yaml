@@ -162,8 +162,8 @@ jobs:
 
     - name: vault enable kv
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 platform
-        vault platform put secret/password value=itsasecret
+        kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 kv
+        vault kv put secret/password value=itsasecret
 
     - name: vault status
       run: |
