@@ -199,8 +199,8 @@ jobs:
 
     - name: vault put secret kv
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault kv put platform5/platform6 user=teste
-        
+        kubectl -n vault exec hashicorp-vault-0 -- vault kv put platform6 user=teste
+
     - name: Remove kubeconfig
       run: |
             rm -rf ~/.kube
