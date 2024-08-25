@@ -20,7 +20,7 @@ on:
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
   kube_development: kttps://development-kubernetes.default.svc:443
-  ACTION: destroy
+  ACTION: apply
   ARGOCD_RELEASE_NAME: argocd
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
@@ -151,7 +151,7 @@ jobs:
         kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY5
 
         kubectl -n vault exec hashicorp-vault-0 -- vault login token=$ROOT
-        kubectl -n vault exec hashicorp-vault-0 -- vault kv put -mount=secret platform foo=world
+        # kubectl -n vault exec hashicorp-vault-0 -- vault kv put -mount=secret platform foo=world
 
     - name: vault status
       run: |
