@@ -178,9 +178,16 @@ jobs:
 
     - name: vault create k8s policy
       run: |
-          kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/usk8ser.hcl
-        
+          kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/k8s.hcl
+
+    - name: vault create token for user
+      run: |
+          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-user
               
+    - name: vault create token for k8s
+      run: |
+          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-k8s
+                  
     - name: vault status
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault status
