@@ -24,7 +24,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     outputs:
       kube_config: ${{ inputs.kube-config }}
-      # vault_root_token: ${{ steps.unseal.outputs.root_token }}
+      vault_root_token: ${{ steps.unseal.outputs.root_token }}
     name: Enable Hashicorp vault
     permissions: 
       contents: read
