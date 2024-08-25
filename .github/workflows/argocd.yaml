@@ -170,7 +170,7 @@ jobs:
 
     - name: vault copy policies
       run: |
-          kubectl -n vault cp devops/tomelin/helm-chart-rollout/deployment/gitops/vault/policies hashicorp-vault-0:/tmp/
+          kubectl -n vault cp ./deployment/gitops/vault/policies hashicorp-vault-0:/tmp/
 
     - name: vault create user policy
       run: |
