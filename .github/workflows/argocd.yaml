@@ -111,7 +111,7 @@ jobs:
 
   call_install_vault:
     name: Implement Hashicorp Vault
-    uses: ./.github/workflows/vault/vault.yaml 
+    uses: ./.github/workflows/vault.yaml 
     needs: deployment
     permissions:
       contents: read
