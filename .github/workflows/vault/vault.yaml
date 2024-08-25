@@ -1,5 +1,5 @@
-name: hashicorp-vault
-run-name: Implement Hashicorp vault
+name: vault-kubernetes
+run-name: Vault resources in Kubernetes CI
 
 on:
   workflow_call:
@@ -8,39 +8,30 @@ on:
         required: true
         type: string
 
+
 env:
+  kube_production: kttps://production-kubernetes.default.svc:443
+  kube_development: kttps://development-kubernetes.default.svc:443
   ACTION: apply
+  ARGOCD_RELEASE_NAME: argocd
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   CLOUDFLARE_DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
   CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
 
 jobs:
-  vault:
+  deployment:
     runs-on: 'ubuntu-latest'
     outputs:
-      kube_config: ${{ inputs.kube-config }}
-      vault_root_token: ${{ steps.unseal.outputs.root_token }}
-    name: Enable Hashicorp vault
+      kube_config: ${{ inputs.kube_config }}
+    name: Deployment by GitOps
     permissions: 
       contents: read
-
     steps:
     - uses: actions/checkout@v1
     
-    - name: Kubeconfig
-      run: |
-        mkdir -p ~/.kube
-        echo ${{ inputs.kube_config }}|base64 -d > ~/.kube/config
-
-    - name: 
-      id: unseal
-      run: echo "root_token=$(echo bla)" >> $GITHUB_OUTPUT
-
-    - name: vault login
-      run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault login token=bla
-
-    - name: Remove kubeconfig
-      run: |
-          rm -rf ~/.kube
-
-        
+    - name: Action status
+      run: echo ok
+              
