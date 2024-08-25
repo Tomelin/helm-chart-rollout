@@ -159,7 +159,8 @@ jobs:
     - name: vault login
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ vars.VAULT_TOKEN }}
-
+        kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 kv
+        
     - name: vault status
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault status
