@@ -33,11 +33,11 @@ jobs:
 
     - name: 
       id: unseal
-      run: echo "root_token=$(echo ${{vars.VAULT_TOKEN}})" >> $GITHUB_OUTPUT
+      run: echo "root_token=$(echo bla)" >> $GITHUB_OUTPUT
 
     - name: vault login
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ vars.VAULT_TOKEN }}
+        kubectl -n vault exec hashicorp-vault-0 -- vault login token=bla
 
     - name: Remove kubeconfig
       run: |
