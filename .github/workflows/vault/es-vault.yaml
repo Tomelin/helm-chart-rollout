@@ -1,0 +1,79 @@
+name: vault-external-secrets
+run-name: Link Hashicorp vault and External Secrets
+
+on:
+  workflow_call:
+    inputs:
+      kube_config:
+        required: true
+        type: string
+      vault_root_token:
+        required: true
+        type: string
+
+env:
+  kube_production: kttps://production-kubernetes.default.svc:443
+  kube_development: kttps://development-kubernetes.default.svc:443
+  ACTION: apply
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  CLOUDFLARE_DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
+  CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
+
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+    name: Enable Hashicorp vault
+    permissions: 
+      contents: read
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo ${{ inputs.kube_config }}|base64 -d > ~/.kube/config
+    
+    - name: 
+      run: echo ${{ inputs.vault_root_token }}
+
+    - name: vault login
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ inputs.vault_root_token }}
+
+    - name: vault create external secret policy
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/external-secret.hcl
+
+    - name: vault put secret kv
+      run: |
+        k8s_host="$(kubectl exec hashicorp-vault-0 -n vault -- printenv | grep KUBERNETES_PORT_443_TCP_ADDR | cut -f 2- -d "=" | tr -d " ")"
+        k8s_port="443"            
+        k8s_cacert="$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 --decode)"
+        tr_account_token="$(kubectl -n vault get secret vault-auth -o jsonpath='{ .data.token }' | base64 --decode)"
+
+        kubectl exec hashicorp-vault-0 -n vault -- \
+          vault write auth/kubernetes/config \
+          token_reviewer_jwt="${tr_account_token}" \
+          kubernetes_host="https://${k8s_host}:${k8s_port}" \
+          kubernetes_ca_cert="${k8s_cacert}" \
+
+          disable_issuer_verification=true
+
+    - name: vault put secret kv
+      run: |
+        es_account_token="$(kubectl -n vault get secret external-secrets -o jsonpath='{ .data.token }' | base64 --decode)"
+        kubectl exec hashicorp-vault-0 -n vault -- vault write auth/kubernetes/role/external-secrets-role \
+            bound_service_account_names=external-secrets \
+            bound_service_account_namespaces=external-secrets \
+            policies=external-secrets-policy \
+            ttl=24h
+
+        kubectl exec hashicorp-vault-0 -n vault -- \
+            vault write auth/kubernetes/login role=external-secrets-role jwt=$es_account_token
+
+    - name: Remove kubeconfig
+      run: |
+          rm -rf ~/.kube
