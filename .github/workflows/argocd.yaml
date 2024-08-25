@@ -158,15 +158,29 @@ jobs:
 
     - name: vault login
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- "vault login token=${{ vars.VAULT_TOKEN }} && vault kv put secret/hello foo=bar"
+        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ vars.VAULT_TOKEN }}
+
+    - name: vault enable kv
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 -path=platform6 kv
+
+    - name: vault put secret kv
+      run: |
+          kubectl -n vault exec hashicorp-vault-0 -- vault kv put platform5/platform6 user=teste
+
+    - name: vault copy policies
+      run: |
+          kubectl -n vault cp devops/tomelin/helm-chart-rollout/deployment/gitops/vault/policies hashicorp-vault-0:/tmp/
+
+    - name: vault create user policy
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-user /tmp/user.hcl
+
+    - name: vault create k8s policy
+      run: |
+          kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/usk8ser.hcl
         
-
-    # - name: vault enable kv
-    #   run: |
-    #     # kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 kv
-    #     kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 hello
-    #     kubectl -n vault exec hashicorp-vault-0 -- vault kv put -mount=secret creds passcode=my-long-passcode
-
+              
     - name: vault status
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault status
