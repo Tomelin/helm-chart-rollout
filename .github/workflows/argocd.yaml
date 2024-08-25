@@ -167,10 +167,6 @@ jobs:
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 -path=platform6 kv
 
-    - name: vault put secret kv
-      run: |
-          kubectl -n vault exec hashicorp-vault-0 -- vault kv put platform5/platform6 user=teste
-
     - name: vault copy policies
       run: |
           kubectl -n vault cp ./deployment/gitops/vault/policies/user.hcl hashicorp-vault-0:/tmp/user.hcl
@@ -192,6 +188,7 @@ jobs:
       run: |
           kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-k8s -display-name=platform6-k8s
                   
+    
     - name: vault status
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault status
@@ -200,6 +197,10 @@ jobs:
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault policy list
 
+    - name: vault put secret kv
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault kv put platform5/platform6 user=teste
+        
     - name: Remove kubeconfig
       run: |
             rm -rf ~/.kube
