@@ -170,7 +170,8 @@ jobs:
 
     - name: vault copy policies
       run: |
-          kubectl -n vault cp ./deployment/gitops/vault/policies hashicorp-vault-0:/tmp/
+          kubectl -n vault cp ./deployment/gitops/vault/policies/user.hcl hashicorp-vault-0:/tmp/user.hcl
+          kubectl -n vault cp ./deployment/gitops/vault/policies/k8s.hcl hashicorp-vault-0:/tmp/k8s.hcl
 
     - name: vault create user policy
       run: |
@@ -182,11 +183,11 @@ jobs:
 
     - name: vault create token for user
       run: |
-          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-user
+          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-user -display-name=platform6-user
               
     - name: vault create token for k8s
       run: |
-          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-k8s
+          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-k8s -display-name=platform6-k8s
                   
     - name: vault status
       run: |
