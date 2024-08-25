@@ -102,7 +102,7 @@ jobs:
     #     cat ./deployment/gitops/vault/external-dns.yaml
   
     - name: install vault
-      run: kubectl apply -R -f ./deployment/gitops/vault
+      run: kubectl apply -R -f ./deployment/gitops/vault/vault.yaml
 
 
     - name: Remove kubeconfig
