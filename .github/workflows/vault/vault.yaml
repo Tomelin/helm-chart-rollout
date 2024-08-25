@@ -15,17 +15,14 @@ env:
 
 jobs:
   vault:
-    name: Enable Hashicorp vault
     runs-on: 'ubuntu-latest'
     outputs:
       kube_config: ${{ inputs.kube-config }}
       vault_root_token: ${{ steps.unseal.outputs.root_token }}
+    name: Enable Hashicorp vault
     permissions: 
       contents: read
 
-    defaults:
-      run:
-          shell: bash
     steps:
     - uses: actions/checkout@v1
     
