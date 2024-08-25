@@ -1,0 +1,134 @@
+name: hashicorp-vault
+run-name: Implement Hashicorp vault
+
+on:
+  workflow_call:
+    inputs:
+      kube_config:
+        required: true
+        type: string
+
+env:
+  kube_production: kttps://production-kubernetes.default.svc:443
+  kube_development: kttps://development-kubernetes.default.svc:443
+  ACTION: apply
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  CLOUDFLARE_DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
+  CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
+
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+    name: Enable Hashicorp vault
+    permissions: 
+      contents: read
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Install Helm
+      uses: azure/setup-helm@v4
+      with:
+        version: v3.13.0
+        kubeconfig: ${{ inputs.kube_config }}
+      env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+
+    - name: wait vault is running
+      run: |
+            count=5
+            increment=5
+            pesos=(5 6 7 8 9)
+            ponderado=0
+    
+            while true;do
+              OK=$(kubectl -n vault get pods hashicorp-vault-0 --ignore-not-found=true|wc -l|sed 's/ //g')
+              echo "ok é: $OK"
+    
+              if [[ $OK -gt 0 ]]; then
+                result=$((count + increment + ponderado))
+                echo "ponderado is: $result"
+                sleep $result
+                break
+              fi
+    
+              ponderado=$((ponderado + count * pesos[count % ${#pesos[@]}]))
+              echo "ponderado is: $ponderado"
+    
+              count=$((count + increment))
+              sleep $ponderado
+            done
+            
+    
+    - name: unseal vault
+      id: unseal
+      run: |
+            kubectl -n vault exec hashicorp-vault-0 -- vault operator init > ~/.kube/vault
+            cat ~/.kube/vault
+            KEY1=$(cat ~/.kube/vault |sed -n 1p | awk -F ': ' '{ print $2 }')
+            echo $KEY1
+            KEY2=$(cat ~/.kube/vault |sed -n 2p | awk -F ': ' '{ print $2 }')
+            echo $KEY2
+            KEY3=$(cat ~/.kube/vault |sed -n 3p | awk -F ': ' '{ print $2 }')
+            echo $KEY3
+            KEY4=$(cat ~/.kube/vault |sed -n 4p | awk -F ': ' '{ print $2 }')
+            echo $KEY4
+            KEY5=$(cat ~/.kube/vault |sed -n 5p | awk -F ': ' '{ print $2 }')
+            echo $KEY5
+            ROOT=$(cat ~/.kube/vault |grep '^Initial'| awk -F ': ' '{ print $2 }')
+            echo $ROOT
+            echo "root_token=$(echo $ROOT)" >> $GITHUB_OUTPUT
+    
+            kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY1
+            kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY2
+            kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY3
+            kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY4
+            kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY5
+    
+            kubectl -n vault exec hashicorp-vault-0 -- vault login token=$ROOT
+    
+    - name: 
+      run: echo ${{ steps.unseal.outputs.root_token }}
+    - name: vault login
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ steps.unseal.outputs.root_token }}
+
+    - name: vault enable kv
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 -path=platform6 kv
+
+    - name: vault copy policies
+      run: |
+          kubectl -n vault cp ./deployment/gitops/vault/policies/user.hcl hashicorp-vault-0:/tmp/user.hcl
+          kubectl -n vault cp ./deployment/gitops/vault/policies/k8s.hcl hashicorp-vault-0:/tmp/k8s.hcl
+
+    - name: vault create user policy
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-user /tmp/user.hcl
+
+    - name: vault create k8s policy
+      run: |
+          kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/k8s.hcl
+
+    - name: vault create token for user
+      run: |
+          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-user -display-name=platform6-user
+              
+    - name: vault create token for k8s
+      run: |
+          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-k8s -display-name=platform6-k8s                  
+    
+    - name: vault status
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault status
+
+    - name: list policy 
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault policy list
+
+    - name: vault put secret kv
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault kv put platform6/gitops user=teste

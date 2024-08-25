@@ -20,6 +20,11 @@ spec:
         ui:
           enabled: true
         server:
+          ingress:
+            enabled: true
+            hosts:
+              - host: platform-vault.synera.com.br
+                paths: []
           standalone:
             enabled: true
             config: |
@@ -31,7 +36,7 @@ spec:
                 cluster_address = "[::]:8201"
               }
               storage "file" {
-                path = "/vault/data1"
+                path = "/vault/data2"
               }
           ha:
             enabled: false
