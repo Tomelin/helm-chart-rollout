@@ -2,15 +2,11 @@ name: hashicorp-vault
 run-name: Implement Hashicorp vault
 
 on:
-  push:
-    branches: [ "main", "develop", "production"]
-  pull_request:
-    branches: [ "main", "develop", "production"]
-  # workflow_call:
-  #   inputs:
-  #     kube_config:
-  #       required: true
-  #       type: string
+  workflow_call:
+    inputs:
+      kube_config:
+        required: true
+        type: string
 
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
