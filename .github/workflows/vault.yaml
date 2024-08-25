@@ -28,13 +28,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     
-    - name: Install Helm
-      uses: azure/setup-helm@v4
-      with:
-        version: v3.13.0
-        kubeconfig: ${{ inputs.kube_config }}
-      env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    - name: Kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo ${{ inputs.kube_config }}|base64 -d > ~/.kube/config
 
 
     - name: wait vault is running
