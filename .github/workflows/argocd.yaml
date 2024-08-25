@@ -81,8 +81,8 @@ jobs:
             helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml   --create-namespace --namespace argoproj
           fi
          
-    - name: install projects
-      run: kubectl apply -R -f ./deployment/gitops/project
+    # - name: install projects
+    #   run: kubectl apply -R -f ./deployment/gitops/project
 
     # - name: install ingress
     #   run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
@@ -162,7 +162,7 @@ jobs:
 
     - name: vault enable kv
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 kv
+        # kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 kv
         kubectl -n vault exec hashicorp-vault-0 -- vault kv put -mount=secret creds passcode=my-long-passcode
 
     - name: vault status
