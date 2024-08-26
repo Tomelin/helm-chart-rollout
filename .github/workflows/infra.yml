@@ -114,16 +114,3 @@ jobs:
       environment: ${{ needs.terraform.outputs.env }}
       cloudflare_dns_token: ${{ needs.terraform.outputs.dnstoken }}
       action: ${{ needs.terraform.outputs.action }}
-
-  print_outputs:
-    name: 'Terraform'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Print Output Values
-        run: |
-          echo "terraform.result: ${{ needs.terraform.result }}"
-          echo "terraform.outputs.env: ${{ needs.terraform.outputs.action }}"
-          

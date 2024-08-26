@@ -85,8 +85,8 @@ jobs:
             helm install ${{ env.ARGOCD_RELEASE_NAME }} argoproj/argo-cd --values ./deployment/helm/argoproj/argocd/values.yaml   --create-namespace --namespace argoproj
           fi
          
-    # - name: install projects
-    #   run: kubectl apply -R -f ./deployment/gitops/project
+    - name: install projects
+      run: kubectl apply -R -f ./deployment/gitops/project
 
     # - name: install ingress
     #   run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
@@ -106,8 +106,13 @@ jobs:
     #     cat ./deployment/gitops/vault/external-dns.yaml
   
     - name: install vault
-      run: kubectl apply -R -f ./deployment/gitops/vault/vault.yaml
+      run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
+    - name: install external secrets
+      run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
+
+    - name: install tools to link vault with es
+      run: kubectl apply -R -f ./deployment/gitops/vault
 
     - name: Remove kubeconfig
       run: |
