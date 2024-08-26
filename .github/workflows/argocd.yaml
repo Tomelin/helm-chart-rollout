@@ -122,6 +122,10 @@ jobs:
     - name: get pods
       run: kubectl get pods -n vault
 
+
+    - name: get pods
+      run: kubectl api-versions |grep -i external
+
     - name: install vault secrets
       run: kubectl apply -f ./deployment/gitops/vault/vault-secret.yaml
 
