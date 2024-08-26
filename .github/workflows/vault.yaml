@@ -25,7 +25,6 @@ jobs:
     if: ${{ inputs.action }} == 'destroy'
     runs-on: 'ubuntu-latest'
     outputs:
-      kube_config: ${{ inputs.kube-config }}
       vault_root_token: ${{ steps.unseal.outputs.root_token }}
       action: ${{ inputs.action }}
     name: Enable Hashicorp vault
