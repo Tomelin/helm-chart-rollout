@@ -115,13 +115,21 @@ jobs:
     - name: install external secrets
       run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
+    - name: install vault secrets
+      run: kubectl apply -f ./deployment/gitops/vault/vault-secret.yaml
+
+    - name: install es secret
+      run: kubectl apply -f ./deployment/gitops/vault/es-secret.yaml
+
+    - name: install crb
+      run: kubectl apply -f ./deployment/gitops/vault/vault-crb.yaml
+
     - name: install tools to link vault with es
       run: kubectl apply -R -f ./deployment/gitops/vault
 
     - name: Remove kubeconfig
       run: |
             rm -rf ~/.kube
-
 
   call_install_vault:
     name: Implement Hashicorp Vault
