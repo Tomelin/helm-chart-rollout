@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opencost
+  namespace: argoproj
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  project: platform-demo
+  source:
+    repoURL: 'https://opencost.github.io/opencost-helm-chart'
+    targetRevision: 1.42.0
+    chart: opencost
+    helm:
+      values: |
+        opencost:
+          customPricing:
+            enabled: true
+            provider: azure
+            azure:
+              subscriptionId: __AzureSubscription__
+              tenantId: __AzureTenantId__
+              clientId: __AzureClientId__
+              clientSecret: __AzureClientSecret__
+          ui:
+            enabled: true
+            ingress:
+              enabled: "true"
+              hosts:
+              - host: platform-costs.synera.com.br
+  destination:
+    namespace: opencost
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

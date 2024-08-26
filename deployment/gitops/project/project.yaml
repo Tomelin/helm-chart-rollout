@@ -24,3 +24,4 @@ spec:
   - 'https://charts.external-secrets.io'
   - 'https://helm.releases.hashicorp.com'
   - 'https://kubernetes-sigs.github.io/external-dns'
+  - 'https://opencost.github.io/opencost-helm-chart'

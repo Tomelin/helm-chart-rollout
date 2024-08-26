@@ -111,6 +111,9 @@ jobs:
     #     cat ./deployment/gitops/vault/external-dns.yaml
   
 
+    - name: install opencost
+      run: kubectl apply -R -f ./deployment/gitops/opencost
+
     - name: install external secrets
       run: kubectl apply -f ./deployment/gitops/vault/external-secrets.yaml
 
