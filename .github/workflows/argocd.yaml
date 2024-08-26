@@ -128,7 +128,7 @@ jobs:
     needs: deployment
     permissions:
       contents: read
-    if: ${{ needs.deployment.result }} == 'success' && inputs.action == 'apply'
+    if:  inputs.action == 'apply'
     with:
       kube_config: ${{ inputs.kube-config }}
       action: ${{ inputs.action }}
