@@ -23,9 +23,9 @@ env:
   CLOUDFLARE_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT }}
 
 jobs:
-  deployment:
+  es-vault:
     runs-on: 'ubuntu-latest'
-    name: Enable Hashicorp vault
+    name: Link external secret with Vault
     permissions: 
       contents: read
     steps:

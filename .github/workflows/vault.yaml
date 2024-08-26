@@ -91,10 +91,6 @@ jobs:
             kubectl -n vault exec hashicorp-vault-0 -- vault operator unseal $KEY5
     
             kubectl -n vault exec hashicorp-vault-0 -- vault login token=$ROOT
-    
-    # - name: 
-    #   id: unseal
-    #   run: echo "root_token=$(echo ${{vars.VAULT_TOKEN}})" >> $GITHUB_OUTPUT
 
     - name: vault login
       run: |
@@ -186,6 +182,6 @@ jobs:
       contents: read
     if: ${{ needs.vault.result }} == 'success'
     with:
-      kube_config: ${{ needs.vault.outputs.kube_config }}
+      kube_config: ${{ inputs.kube_config }}
       vault_root_token:  ${{ needs.vault.outputs.vault_root_token }}
         
