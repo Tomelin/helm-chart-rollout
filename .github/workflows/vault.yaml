@@ -96,10 +96,14 @@ jobs:
         kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ steps.unseal.outputs.root_token }}
         # kubectl -n vault exec hashicorp-vault-0 -- vault login token=${{ vars.VAULT_TOKEN }}
 
-    - name: vault enable kv
+    - name: vault enable kv in platform path
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 -path=platform6 kv
 
+    - name: vault enable kv
+      run: |
+        kubectl exec vault-0 -n vault -- vault secrets enable -version=2 kv
+        
     - name: vault enable kubernetes
       run: |
           kubectl -n vault exec hashicorp-vault-0 -- vault auth enable kubernetes
