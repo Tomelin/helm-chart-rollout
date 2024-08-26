@@ -145,8 +145,7 @@ jobs:
       kube_config: ${{ inputs.kube-config }}
       action: ${{ inputs.action }}
     name: Print outpus
-    needs: deployment
-    if: always() && (needs.deployment.result == skipped || needs.deployment.result == success)
+    if: always()
     defaults:
       run:
         shell: bash
