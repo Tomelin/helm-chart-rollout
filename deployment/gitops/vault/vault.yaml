@@ -17,6 +17,8 @@ spec:
     chart: vault
     helm:
       values: |
+        injector:
+          enabled: false
         ui:
           enabled: true
         server:
