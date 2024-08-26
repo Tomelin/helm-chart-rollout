@@ -91,7 +91,7 @@ jobs:
          
     - name: install projects
       run: kubectl apply -R -f ./deployment/gitops/project
-      
+
 
     # - name: install ingress
     #   run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
@@ -114,7 +114,13 @@ jobs:
       run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
     - name: install external secrets
-      run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
+      run: kubectl apply -f ./deployment/gitops/vault/external-secrets.yaml
+
+    - name: get ns
+      run: kubectl get ns
+
+    - name: get pods
+      run: kubectl get pods -n vault
 
     - name: install vault secrets
       run: kubectl apply -f ./deployment/gitops/vault/vault-secret.yaml
