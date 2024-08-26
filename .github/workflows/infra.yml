@@ -114,4 +114,4 @@ jobs:
       environment: ${{ needs.terraform.outputs.env }}
       cloudflare_dns_token: ${{ needs.terraform.outputs.dnstoken }}
       action: ${{ needs.terraform.outputs.action }}
-      first_deployment: true
+
