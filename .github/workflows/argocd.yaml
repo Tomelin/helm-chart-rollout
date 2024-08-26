@@ -146,6 +146,7 @@ jobs:
       action: ${{ inputs.action }}
     name: Print outpus
     needs: deployment
+    if: needs.deployment.result != 'success'
     defaults:
       run:
         shell: bash
