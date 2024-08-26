@@ -36,7 +36,7 @@ jobs:
         mkdir -p ~/.kube
         echo ${{ inputs.kube_config }}|base64 -d > ~/.kube/config
     
-    - name: 
+    - name: debug vault token
       run: echo ${{ inputs.vault_root_token }}
 
     - name: vault login
@@ -65,6 +65,7 @@ jobs:
     - name: vault put secret kv
       run: |
         es_account_token="$(kubectl -n vault get secret external-secrets -o jsonpath='{ .data.token }' | base64 --decode)"
+        
         kubectl exec hashicorp-vault-0 -n vault -- vault write auth/kubernetes/role/external-secrets-role \
             bound_service_account_names=external-secrets \
             bound_service_account_namespaces=vault \
