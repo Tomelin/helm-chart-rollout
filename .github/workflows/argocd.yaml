@@ -110,6 +110,13 @@ jobs:
     #   run: |
     #     cat ./deployment/gitops/vault/external-dns.yaml
   
+
+    - name: install external secrets
+      run: kubectl apply -f ./deployment/gitops/vault/external-secrets.yaml
+
+    - name: wait external secret is running
+      run: sleep 60
+
     - name: install vault
       run: kubectl apply -f ./deployment/gitops/vault/vault.yaml
 
@@ -138,11 +145,6 @@ jobs:
               sleep $ponderado
             done
 
-    - name: install external secrets
-      run: kubectl apply -f ./deployment/gitops/vault/external-secrets.yaml
-
-    - name: wait external secret is running
-      run: sleep 120
 
     - name: install vault secrets
       run: kubectl apply -f ./deployment/gitops/vault/vault-secret.yaml
