@@ -91,6 +91,7 @@ jobs:
          
     - name: install projects
       run: kubectl apply -R -f ./deployment/gitops/project
+      
 
     # - name: install ingress
     #   run: kubectl apply -f ./deployment/gitops/ingress/controller.yaml
