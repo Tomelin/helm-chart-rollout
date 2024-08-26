@@ -19,7 +19,7 @@ terraform {
     resource_group_name  = "shared"
     storage_account_name = "terraformvars"
     container_name       = "terraform"
-    key                  = "terraform2.tfstate"
+    key                  = "terraform.tfstate"
   }
 }
 
