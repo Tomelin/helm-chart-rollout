@@ -19,6 +19,10 @@ on:
       action:  
         required: true
         type: string
+      first_deployment:  
+        required: false
+        type: boolean
+        default: false
 
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
@@ -38,7 +42,7 @@ jobs:
       kube_config: ${{ inputs.kube-config }}
       action: ${{ inputs.action }}
     name: Deployment by GitOps
-    if: ${{ inputs.action }} == 'destroy'
+    if: inputs.first_deployment
     permissions: 
       contents: read
     steps:
@@ -124,9 +128,9 @@ jobs:
     needs: deployment
     permissions:
       contents: read
-    if: ${{ needs.deployment.result }} == 'success'
+    if: ${{ needs.deployment.result }} == 'success' && inputs.action == 'apply'
     with:
-      kube_config: ${{ needs.deployment.outputs.kube_config }}
-      action: ${{ needs.deployment.outputs.action }}
+      kube_config: ${{ inputs.kube-config }}
+      action: ${{ inputs.action }}
 
 
