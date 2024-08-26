@@ -71,8 +71,7 @@ jobs:
             policies=external-secrets-policy \
             ttl=24h
 
-        kubectl exec hashicorp-vault-0 -n vault -- \
-            vault write auth/kubernetes/login role=external-secrets-role jwt=$es_account_token
+        kubectl exec hashicorp-vault-0 -n vault -- vault write auth/kubernetes/login role=external-secrets-role jwt=$es_account_token
 
     - name: Remove kubeconfig
       run: |
