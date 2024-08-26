@@ -37,32 +37,6 @@ jobs:
       run: |
         mkdir -p ~/.kube
         echo ${{ inputs.kube_config }}|base64 -d > ~/.kube/config
-
-    # - name: wait vault is running
-    #   run: |
-    #         count=5
-    #         increment=5
-    #         pesos=(5 6 7 8 9)
-    #         ponderado=0
-    
-    #         while true;do
-    #           OK=$(kubectl -n vault get pods hashicorp-vault-0 --ignore-not-found=true|wc -l|sed 's/ //g')
-    #           echo "ok é: $OK"
-    
-    #           if [[ $OK -gt 0 ]]; then
-    #             result=$((count + increment + ponderado))
-    #             echo "ponderado is: $result"
-    #             sleep $result
-    #             break
-    #           fi
-    
-    #           ponderado=$((ponderado + count * pesos[count % ${#pesos[@]}]))
-    #           echo "ponderado is: $ponderado"
-    
-    #           count=$((count + increment))
-    #           sleep $ponderado
-    #         done
-            
     
     - name: unseal vault
       id: unseal
@@ -102,7 +76,7 @@ jobs:
 
     - name: vault enable kv
       run: |
-        kubectl exec vault-0 -n vault -- vault secrets enable -version=2 kv
+        kubectl exec hashicorp-vault-0  -n vault -- vault secrets enable -version=2 kv
         
     - name: vault enable kubernetes
       run: |
