@@ -16,11 +16,13 @@ on:
       cloudflare_dns_token:  
         required: true
         type: string
+      action:  
+        required: true
+        type: string
 
 env:
   kube_production: kttps://production-kubernetes.default.svc:443
   kube_development: kttps://development-kubernetes.default.svc:443
-  ACTION: apply
   ARGOCD_RELEASE_NAME: argocd
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
@@ -72,7 +74,7 @@ jobs:
         echo ${{ inputs.kube-config }}|base64 -d > ~/.kube/config
 
     - name: Install argocd chart
-      if: ${{ env.ACTION }} == 'apply'
+      if: ${{ inputs.action }} == 'apply'
       run: |
           COUNT=$(helm list -A --filter ${{ env.ARGOCD_RELEASE_NAME }}|grep -v  UPDATED |wc -l |sed 's/ //g')
           if [ $COUNT == 0 ];then
