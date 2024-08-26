@@ -38,6 +38,7 @@ jobs:
       kube_config: ${{ inputs.kube-config }}
       action: ${{ inputs.action }}
     name: Deployment by GitOps
+    if: ${{ inputs.action }} == 'destroy'
     permissions: 
       contents: read
     steps:
