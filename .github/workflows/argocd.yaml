@@ -122,14 +122,14 @@ jobs:
       run: |
             rm -rf ~/.kube
 
-            
+
   call_install_vault:
     name: Implement Hashicorp Vault
     uses: ./.github/workflows/vault.yaml 
     needs: deployment
     permissions:
       contents: read
-    if: always() && (needs.deployment.result == 'skipped' || needs.deployment.result == 'success') && inputs.action == 'apply'
+    if: (needs.deployment.result == 'skipped' || needs.deployment.result == 'success') && inputs.action == 'apply'
     with:
       kube_config: ${{ inputs.kube-config }}
       action: ${{ inputs.action }}
