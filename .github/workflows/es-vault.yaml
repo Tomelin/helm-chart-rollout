@@ -45,7 +45,7 @@ jobs:
 
     - name: vault create external secret policy
       run: |
-        kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-external-secret /tmp/external-secret.hcl
+        kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform-external-secret /tmp/external-secret.hcl
 
     - name: vault put secret kv
       run: |
