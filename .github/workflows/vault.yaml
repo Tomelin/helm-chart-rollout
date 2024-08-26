@@ -98,7 +98,7 @@ jobs:
 
     - name: vault enable kv in platform path
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 -path=platform6 kv
+        kubectl -n vault exec hashicorp-vault-0 -- vault secrets enable -version=2 -path=platform kv
 
     - name: vault enable kv
       run: |
@@ -116,23 +116,23 @@ jobs:
 
     - name: vault create user policy
       run: |
-        kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-user /tmp/user.hcl
+        kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform-user /tmp/user.hcl
 
     - name: vault create k8s policy
       run: |
-          kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/k8s.hcl
+          kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform-k8s /tmp/k8s.hcl
 
     # - name: vault create external secret policy
     #   run: |
-    #     kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform6-k8s /tmp/external-secret.hcl
+    #     kubectl -n vault exec hashicorp-vault-0 --  vault policy write platform-k8s /tmp/external-secret.hcl
     
     - name: vault create token for user
       run: |
-          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-user -display-name=platform6-user
+          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform-user -display-name=platform-user
               
     - name: vault create token for k8s
       run: |
-          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform6-k8s -display-name=platform6-k8s                  
+          kubectl -n vault exec -ti hashicorp-vault-0 -- vault token create -policy=platform-k8s -display-name=platform-k8s                  
     
     - name: vault status
       run: |
@@ -144,7 +144,8 @@ jobs:
 
     - name: vault put secret kv
       run: |
-        kubectl -n vault exec hashicorp-vault-0 -- vault kv put platform6/gitops user=teste
+        kubectl -n vault exec hashicorp-vault-0 -- vault kv put platform/gitops user=teste
+
 
     # - name: vault put secret kv
     #   run: |
