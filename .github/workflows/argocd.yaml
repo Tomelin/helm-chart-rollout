@@ -122,6 +122,41 @@ jobs:
       run: |
             rm -rf ~/.kube
 
+  print_outputs:
+    runs-on: 'ubuntu-latest'
+    outputs:
+      kube_config: ${{ inputs.kube-config }}
+      action: ${{ inputs.action }}
+    name: Print outpus
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Print Output Values
+      run: |
+        echo "terraform.result: ${{ needs }}"
+        echo "terraform.outputs.env: ${{ needs.deployment }}"
+        echo "terraform.outputs.action: ${{ needs.deployment.result }}"
+  print_outputs_needs:
+    runs-on: 'ubuntu-latest'
+    outputs:
+      kube_config: ${{ inputs.kube-config }}
+      action: ${{ inputs.action }}
+    name: Print outpus
+    needs: deployment
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Print Output Values
+      run: |
+        echo "terraform.result: ${{ needs }}"
+        echo "terraform.outputs.env: ${{ needs.deployment }}"
+        echo "terraform.outputs.action: ${{ needs.deployment.result }}"
   call_install_vault:
     name: Implement Hashicorp Vault
     uses: ./.github/workflows/vault.yaml 
