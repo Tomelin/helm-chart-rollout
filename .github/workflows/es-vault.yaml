@@ -61,7 +61,7 @@ jobs:
           kubernetes_ca_cert="${k8s_cacert}" \
           disable_issuer_verification=true
 
-    - name: vault put secret kv
+    - name: vault write external-secrets-role role
       run: |
         es_account_token="$(kubectl -n vault get secret external-secrets -o jsonpath='{ .data.token }' | base64 --decode)"
         
@@ -71,8 +71,22 @@ jobs:
             policies=external-secrets-policy \
             ttl=24h
 
+    - name: vault write external-secrets-login 
+      run: |
+        es_account_token="$(kubectl -n vault get secret external-secrets -o jsonpath='{ .data.token }' | base64 --decode)"
+        
         kubectl exec hashicorp-vault-0 -n vault -- vault write auth/kubernetes/login role=external-secrets-role jwt=$es_account_token
 
+    - name: list policy 
+      run: |
+        kubectl -n vault exec hashicorp-vault-0 -- vault policy list
+        vault list auth/kubernetes/role
+
+    - name: list policy 2      
+      run: |
+        vault auth list
+        vault auth list -detailed
+        
     - name: Remove kubeconfig
       run: |
           rm -rf ~/.kube
