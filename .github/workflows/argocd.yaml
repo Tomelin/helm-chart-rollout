@@ -36,6 +36,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     outputs:
       kube_config: ${{ inputs.kube-config }}
+      action: ${{ inputs.action }}
     name: Deployment by GitOps
     permissions: 
       contents: read
@@ -120,5 +121,6 @@ jobs:
     if: ${{ needs.deployment.result }} == 'success'
     with:
       kube_config: ${{ needs.deployment.outputs.kube_config }}
+      action: ${{ needs.deployment.outputs.action }}
 
 

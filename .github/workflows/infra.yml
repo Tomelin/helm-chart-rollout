@@ -106,7 +106,7 @@ jobs:
     needs: terraform
     permissions:
       contents: read
-    if: ${{ needs.terraform.result }} == 'success' && ${{ needs.terraform.outputs.action }} == 'apply'
+    if: ${{ needs.terraform.result }} == 'success' && ${{ needs.terraform.outputs.action }} == 'destroy'
     secrets:
         DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
     with:
