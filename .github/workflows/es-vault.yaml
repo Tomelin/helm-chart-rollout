@@ -68,7 +68,7 @@ jobs:
         kubectl exec hashicorp-vault-0 -n vault -- vault write auth/kubernetes/role/external-secrets-role \
             bound_service_account_names=external-secrets \
             bound_service_account_namespaces=vault \
-            policies=external-secrets-policy \
+            policies=platform-external-secret \
             ttl=24h
 
     - name: vault write external-secrets-login 
@@ -80,12 +80,12 @@ jobs:
     - name: list policy 
       run: |
         kubectl -n vault exec hashicorp-vault-0 -- vault policy list
-        vault list auth/kubernetes/role
+        kubectl -n vault exec hashicorp-vault-0 -- vault list auth/kubernetes/role
 
     - name: list policy 2      
       run: |
-        vault auth list
-        vault auth list -detailed
+        kubectl -n vault exec hashicorp-vault-0 -- vault auth list
+        kubectl -n vault exec hashicorp-vault-0 -- vault auth list -detailed
         
     - name: Remove kubeconfig
       run: |
