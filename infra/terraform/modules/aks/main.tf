@@ -12,7 +12,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = var.resource_group
   dns_prefix          = var.dns_prefix
 
-  sku_tier = Free 
+  sku_tier = "Free" 
   private_cluster_enabled = false
 
   key_vault_secrets_provider {
